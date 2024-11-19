@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Buttons from "./UI/Buttons";
 import CartContext from "./Store/CartContext";
+import Review from "./Review";
 
 export default function MealItem({ meal }) {
   const cartContxt = useContext(CartContext);
@@ -11,11 +12,7 @@ export default function MealItem({ meal }) {
   return (
     <li className="meal-item">
       <article>
-        <img
-          className="meal-image"
-          src={`http://localhost:3000/${meal.image}`}
-          alt={meal.name}
-        />
+        <img src={`http://localhost:3000/${meal.image}`} alt={meal.name} />
         <div>
           <h3>{meal.name}</h3>
           <p className="meal-item-price">{meal.price}</p>

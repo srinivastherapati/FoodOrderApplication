@@ -4,6 +4,7 @@ import Checkout from "./Components/Checkout.jsx";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Sidebar from "./Components/Sidebar";
+import Review from "./Components/Review.jsx";
 import { CartContextProvider } from "./Components/Store/CartContext.jsx";
 import { UserProgressContextProvider } from "./Components/Store/UserProgressContext.jsx";
 

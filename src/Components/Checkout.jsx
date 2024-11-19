@@ -84,6 +84,11 @@ if(response && !error){
             <Input id="city" type="text" label="City"  />
             <Input id="postal-code" type="text" label="Postal Code"  />
             </div>
+            <p>Card Deatils</p>
+            <Input id="Card Number" type="text" label="card Number" ></Input>
+            <Input id="Name on Card" type="text" label="Name On Card" ></Input>
+            <Input id="CVV" type="text" label="CVV" ></Input>
+            <Input id="expiry" type="text" label="expiry" ></Input>
             {error && <ErrorPage title="failed to place order" message={error} />}
             <p className="modal-actions">
           {actions}     
