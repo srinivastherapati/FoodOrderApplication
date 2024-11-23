@@ -4,6 +4,7 @@ import Cart from "./Components/Cart";
 import Checkout from "./Components/Checkout";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
+import CustomerOrders from "./Components/CustomerOrders";
 import Sidebar from "./Components/Sidebar";
 import { CartContextProvider } from "./Components/Store/CartContext";
 import { UserProgressContextProvider } from "./Components/Store/UserProgressContext";
@@ -38,7 +39,7 @@ function App() {
           <Sidebar onLogout={handleLogout} />
           <div style={{ marginLeft: "250px" }}>
             <Header />
-            <Meals />
+            <CustomerOrders />
             <Cart />
             <Checkout />
           </div>
