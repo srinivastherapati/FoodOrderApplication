@@ -1,26 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import LoginPage from "./Components/LoginPage";
 import Cart from "./Components/Cart";
-import Checkout from "./Components/Checkout.jsx";
+import Checkout from "./Components/Checkout";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Sidebar from "./Components/Sidebar";
-import Review from "./Components/Review.jsx";
-import { CartContextProvider } from "./Components/Store/CartContext.jsx";
-import { UserProgressContextProvider } from "./Components/Store/UserProgressContext.jsx";
+import { CartContextProvider } from "./Components/Store/CartContext";
+import { UserProgressContextProvider } from "./Components/Store/UserProgressContext";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("food");
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const [user, setUser] = useState({
-    isAdmin: false,
-    name: "John Doe",
-    email: "john@example.com",
-  });
+  useEffect(() => {
+    // Check if user is already logged in
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+    setLoggedIn(isLoggedIn);
+  }, []);
 
   const handleLogout = () => {
-    console.log("User logged out");
-    // Add logout functionality here
+    localStorage.removeItem("loggedIn");
+    setLoggedIn(false);
   };
+
+  if (!loggedIn) {
+    return <LoginPage setLoggedIn={setLoggedIn} />;
+  }
 
   const mainContainerStyle = {
     display: "flex",
@@ -31,18 +35,10 @@ function App() {
     <UserProgressContextProvider>
       <CartContextProvider>
         <div style={mainContainerStyle}>
-          <Sidebar
-            isAdmin={user.isAdmin}
-            userName={user.name}
-            userEmail={user.email}
-            onLogout={handleLogout}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+          <Sidebar onLogout={handleLogout} />
           <div style={{ marginLeft: "250px" }}>
             <Header />
             <Meals />
-            {currentPage == "your-orders" && <CustomerOrders />}
             <Cart />
             <Checkout />
           </div>
