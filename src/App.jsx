@@ -4,6 +4,7 @@ import Cart from "./Components/Cart";
 import Checkout from "./Components/Checkout";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
+import CustomerOrders from "./Components/CustomerOrders";
 import Sidebar from "./Components/Sidebar";
 import CustomerOrders from "./Components/CustomerOrders";
 import { CartContextProvider } from "./Components/Store/CartContext";
