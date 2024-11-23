@@ -5,10 +5,12 @@ import Checkout from "./Components/Checkout";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Sidebar from "./Components/Sidebar";
+import CustomerOrders from "./Components/CustomerOrders";
 import { CartContextProvider } from "./Components/Store/CartContext";
 import { UserProgressContextProvider } from "./Components/Store/UserProgressContext";
 
 function App() {
+  const [currentPage, setCurrentPage] = useState("food");
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -38,7 +40,13 @@ function App() {
           <Sidebar onLogout={handleLogout} />
           <div style={{ marginLeft: "250px" }}>
             <Header />
-            <Meals />
+            {currentPage == "food" && <Meals />}
+            {currentPage == "beverages" && <Meals />}
+            {currentPage == "grocery" && <Meals />}
+            {currentPage == "dairy" && <Meals />}
+            {currentPage == "snacks" && <Meals />}
+            {currentPage == "gas" && <Meals />}
+            {currentPage == "your-orders" && <CustomerOrders />}
             <Cart />
             <Checkout />
           </div>
