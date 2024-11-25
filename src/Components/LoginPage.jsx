@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
 
-function LoginPage({ setLoggedIn }) {
+function LoginPage({ setLoggedIn, setUserData }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,10 +15,25 @@ function LoginPage({ setLoggedIn }) {
   const handleLogin = (e) => {
     e.preventDefault();
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const user = storedUsers.find((user) => user.email === email && user.password === password);
+    const user = storedUsers.find(
+      (user) => user.email === email && user.password === password
+    );
 
     if (user) {
       localStorage.setItem("loggedIn", "true");
+      localStorage.setItem(
+        "userDetails",
+        JSON.stringify({
+          userEmail: user.email,
+          userName: "User Test",
+          isAdmin: true,
+        })
+      );
+      setUserData({
+        userEmail: user.email,
+        userName: "User Test",
+        isAdmin: true,
+      });
       setLoggedIn(true);
     } else {
       alert("Invalid credentials!");
@@ -114,12 +129,19 @@ function LoginPage({ setLoggedIn }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2, mb: 2 }}
+          >
             {isLogin ? "Login" : "Sign Up"}
           </Button>
         </form>
         <Button variant="text" onClick={togglePage}>
-          {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+          {isLogin
+            ? "Don't have an account? Sign Up"
+            : "Already have an account? Login"}
         </Button>
       </Paper>
     </Box>

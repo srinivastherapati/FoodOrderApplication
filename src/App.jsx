@@ -4,15 +4,20 @@ import Cart from "./Components/Cart";
 import Checkout from "./Components/Checkout";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
-import CustomerOrders from "./Components/CustomerOrders";
 import Sidebar from "./Components/Sidebar";
-import CustomerOrders from "./Components/CustomerOrders";
+import CustomerOrders from "./Components/AllOrders";
+import AllOrders from "./Components/CustomerOrders";
+import AllUsers from "./Components/CustomerOrders";
 import { CartContextProvider } from "./Components/Store/CartContext";
 import { UserProgressContextProvider } from "./Components/Store/UserProgressContext";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("food");
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const [userData, setUserData] = useState(
+    JSON.parse(localStorage.getItem("userDetails"))
+  );
 
   useEffect(() => {
     // Check if user is already logged in
@@ -26,7 +31,7 @@ function App() {
   };
 
   if (!loggedIn) {
-    return <LoginPage setLoggedIn={setLoggedIn} />;
+    return <LoginPage setUserData={setUserData} setLoggedIn={setLoggedIn} />;
   }
 
   const mainContainerStyle = {
@@ -38,16 +43,35 @@ function App() {
     <UserProgressContextProvider>
       <CartContextProvider>
         <div style={mainContainerStyle}>
-          <Sidebar onLogout={handleLogout} />
+          <Sidebar
+            userData={userData}
+            onLogout={handleLogout}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
           <div style={{ marginLeft: "250px" }}>
-            <Header />
-            {currentPage == "food" && <Meals />}
-            {currentPage == "beverages" && <Meals />}
-            {currentPage == "grocery" && <Meals />}
-            {currentPage == "dairy" && <Meals />}
-            {currentPage == "snacks" && <Meals />}
-            {currentPage == "gas" && <Meals />}
+            <Header isAdmin={userData.isAdmin} />
+            {currentPage == "food" && (
+              <Meals isAdmin={userData.isAdmin} category={"food"} />
+            )}
+            {currentPage == "beverages" && (
+              <Meals isAdmin={userData.isAdmin} category={"beverages"} />
+            )}
+            {currentPage == "grocery" && (
+              <Meals isAdmin={userData.isAdmin} category={"grocery"} />
+            )}
+            {currentPage == "dairy" && (
+              <Meals isAdmin={userData.isAdmin} category={"dairy"} />
+            )}
+            {currentPage == "snacks" && (
+              <Meals isAdmin={userData.isAdmin} category={"snacks"} />
+            )}
+            {currentPage == "gas" && (
+              <Meals isAdmin={userData.isAdmin} category={"gas"} />
+            )}
             {currentPage == "your-orders" && <CustomerOrders />}
+            {userData.isAdmin && currentPage == "all-orders" && <AllOrders />}
+            {userData.isAdmin && currentPage == "all-users" && <AllUsers />}
             <Cart />
             <Checkout />
           </div>
