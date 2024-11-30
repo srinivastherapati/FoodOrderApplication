@@ -6,8 +6,8 @@ import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Sidebar from "./Components/Sidebar";
 import CustomerOrders from "./Components/AllOrders";
-import AllOrders from "./Components/CustomerOrders";
-import AllUsers from "./Components/CustomerOrders";
+import AllOrders from "./Components/AllOrders";
+import AllUsers from "./Components/AllUsers";
 import { CartContextProvider } from "./Components/Store/CartContext";
 import { UserProgressContextProvider } from "./Components/Store/UserProgressContext";
 
