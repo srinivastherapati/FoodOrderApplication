@@ -6,13 +6,17 @@ const requestConfig = {};
 
 export default function Meals({ isAdmin, category }) {
   const {
-    response: loadMeals,
+    response: loadProducts,
     isLoading,
     error,
-  } = useHttp("http://localhost:3000/meals", requestConfig, []);
+  } = useHttp(
+    `/api/products/get?category=${category.toUpperCase()}`,
+    requestConfig,
+    []
+  );
 
   if (isLoading) {
-    return <p className="center">fetching data....</p>;
+    return <p className="center">Fetching {category} Products....</p>;
   }
   if (error) {
     return <ErrorPage title="failed to fetch meals" message={error.message} />;
@@ -20,8 +24,8 @@ export default function Meals({ isAdmin, category }) {
   return (
     <ul id="meals">
       {" "}
-      {loadMeals.map((meal) => (
-        <MealItem isAdmin={isAdmin} key={meal.id} meal={meal} />
+      {loadProducts.map((product) => (
+        <MealItem isAdmin={isAdmin} key={product.id} product={product} />
       ))}
     </ul>
   );
