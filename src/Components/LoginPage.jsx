@@ -8,6 +8,10 @@ function LoginPage({ setLoggedIn, setUserData }) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
 
   const togglePage = () => {
     setIsLogin(!isLogin);
@@ -29,11 +33,19 @@ function LoginPage({ setLoggedIn, setUserData }) {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const newUser = { name, email, password, phoneNumber };
+      const newUser = {
+        userName: name,
+        email,
+        password,
+        phoneNumber,
+        address: [`${street}, ${city}, ${state}, ${zip}`], // Address as a single formatted string
+      };
+      console.log("Signup Payload:", newUser); // Log payload for debugging
       await registerUser(newUser);
       alert("Signup successful! Please log in.");
       setIsLogin(true);
     } catch (error) {
+      console.error("Signup Error:", error.response?.data || error.message);
       alert(error.message);
     }
   };
@@ -91,6 +103,41 @@ function LoginPage({ setLoggedIn, setUserData }) {
                 margin="normal"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
+                required
+              />
+              <Typography variant="subtitle1" sx={{ textAlign: "left", mt: 2 }}>
+                Address:
+              </Typography>
+              <TextField
+                label="Street"
+                fullWidth
+                margin="normal"
+                value={street}
+                onChange={(e) => setStreet(e.target.value)}
+                required
+              />
+              <TextField
+                label="City"
+                fullWidth
+                margin="normal"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
+              <TextField
+                label="State"
+                fullWidth
+                margin="normal"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+              />
+              <TextField
+                label="Zip Code"
+                fullWidth
+                margin="normal"
+                value={zip}
+                onChange={(e) => setZip(e.target.value)}
                 required
               />
             </>

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import logoImg from "../assets/logo.jpg";
+import logoImg from "../assets/logoImg.jpg";
 import Buttons from "./UI/Buttons";
 import CartContext from "./Store/CartContext.jsx";
 import UserProgressContext from "./Store/UserProgressContext.jsx";
@@ -18,7 +18,7 @@ export default function Header({ isAdmin }) {
     <header id="main-header">
       <div id="title">
         <img src={logoImg} alt="Restraunt Image" />
-        <h1>Paradise</h1>
+        <h1>Gas Station</h1>
       </div>
       <nav>
         {!isAdmin && (

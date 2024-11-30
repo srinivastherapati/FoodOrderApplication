@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://ten-humans-search.loca.lt/api";
+const API_BASE_URL = "http://localhost:8080/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
