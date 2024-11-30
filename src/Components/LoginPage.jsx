@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import { registerUser, loginUser } from "./ServerRequests"; // Import API functions
 
 function LoginPage({ setLoggedIn, setUserData }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,46 +13,28 @@ function LoginPage({ setLoggedIn, setUserData }) {
     setIsLogin(!isLogin);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const user = storedUsers.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
+    try {
+      const userData = await loginUser({ email, password });
       localStorage.setItem("loggedIn", "true");
-      localStorage.setItem(
-        "userDetails",
-        JSON.stringify({
-          userEmail: user.email,
-          userName: "User Test",
-          isAdmin: true,
-        })
-      );
-      setUserData({
-        userEmail: user.email,
-        userName: "User Test",
-        isAdmin: true,
-      });
+      localStorage.setItem("userDetails", JSON.stringify(userData));
+      setUserData(userData);
       setLoggedIn(true);
-    } else {
-      alert("Invalid credentials!");
+    } catch (error) {
+      alert(error.message);
     }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const newUser = { name, email, phoneNumber, password };
-
-    if (storedUsers.some((user) => user.email === email)) {
-      alert("User already exists. Please log in.");
-      setIsLogin(true);
-    } else {
-      localStorage.setItem("users", JSON.stringify([...storedUsers, newUser]));
+    try {
+      const newUser = { name, email, password, phoneNumber };
+      await registerUser(newUser);
       alert("Signup successful! Please log in.");
       setIsLogin(true);
+    } catch (error) {
+      alert(error.message);
     }
   };
 
