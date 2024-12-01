@@ -19,11 +19,13 @@ export default function Meals({ isAdmin, category }) {
     []
   );
 
+  let isAdd = false;
+
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null);
+  const [currentProduct, setCurrentProduct] = useState("");
 
   const products = loadProducts || [];
 
@@ -40,7 +42,9 @@ export default function Meals({ isAdmin, category }) {
 
   const handleSort = (option) => {
     setSortOption(option);
-    const sortedProducts = [...(filteredProducts.length ? filteredProducts : products)];
+    const sortedProducts = [
+      ...(filteredProducts.length ? filteredProducts : products),
+    ];
 
     if (option === "A-Z") {
       sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
@@ -56,16 +60,13 @@ export default function Meals({ isAdmin, category }) {
   };
 
   const handleAddMealSuccess = () => {
+    isAdd = false;
     setShowAddModal(false);
     window.location.reload();
   };
 
-  const handleEditMeal = (product) => {
-    setCurrentProduct(product);
-    setShowAddModal(true);
-  };
-
-  const displayedProducts = searchQuery || sortOption ? filteredProducts : products;
+  const displayedProducts =
+    searchQuery || sortOption ? filteredProducts : products;
 
   if (isLoading) {
     return <p className="center">Fetching {category} Products....</p>;
@@ -73,6 +74,25 @@ export default function Meals({ isAdmin, category }) {
   if (error) {
     return <ErrorPage title="failed to fetch meals" message={error.message} />;
   }
+
+  const handleEditMeal = (product) => {
+    setCurrentProduct(product);
+    isAdd = false;
+    setShowAddModal(true); // Open modal for editing
+  };
+
+  const handleAddMeal = (product) => {
+    setCurrentProduct({
+      name: "",
+      imageUrl: "",
+      stock: 1,
+      description: "",
+      category: category,
+      price: "",
+    });
+    isAdd = true;
+    setShowAddModal(true);
+  };
 
   return (
     <>
@@ -143,7 +163,7 @@ export default function Meals({ isAdmin, category }) {
               }}
               onClick={() => {
                 setCurrentProduct(null);
-                setShowAddModal(true);
+                handleAddMeal();
               }}
             >
               Add New Meal
@@ -158,6 +178,7 @@ export default function Meals({ isAdmin, category }) {
         onClose={() => setShowAddModal(false)}
         onAddSuccess={handleAddMealSuccess}
         currentProduct={currentProduct}
+        isAdd={isAdd}
       />
 
       {/* Meal List */}

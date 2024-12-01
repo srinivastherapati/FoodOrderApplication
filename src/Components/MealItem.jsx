@@ -11,7 +11,7 @@ import { deleteProduct } from "./ServerRequests";
 
 export default function MealItem({ product, isAdmin, onEdit }) {
   const cartContxt = useContext(CartContext);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(product.stock);
 
   function handleAddMeal() {
     cartContxt.addItems({ ...product, quantity });
@@ -77,7 +77,7 @@ export default function MealItem({ product, isAdmin, onEdit }) {
                   onClick={decrementQuantity}
                   aria-label="Decrease Quantity"
                 />
-                <p>{quantity}</p>
+                <p>{product.stock}</p>
                 <AddIcon
                   sx={{ color: "#ffc404" }}
                   onClick={incrementQuantity}
