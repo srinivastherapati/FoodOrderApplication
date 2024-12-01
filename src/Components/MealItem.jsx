@@ -8,17 +8,12 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 
-export default function MealItem({ product, isAdmin }) {
+export default function MealItem({ product, isAdmin, onEdit }) {
   const cartContxt = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
   function handleAddMeal() {
     cartContxt.addItems({ ...product, quantity });
-  }
-
-  function handleEdit() {
-    console.log("Edit meal:", product);
-    // Logic for editing the meal can go here (e.g., opening a modal for editing)
   }
 
   function handleDelete() {
@@ -55,7 +50,7 @@ export default function MealItem({ product, isAdmin }) {
             <div className="admin-actions">
               <EditIcon
                 sx={{ color: "#ffc404" }}
-                onClick={handleEdit}
+                onClick={() => onEdit(product)} // Call onEdit when Edit button is clicked
                 aria-label="Edit"
               />
               <div className="quantity-controls">

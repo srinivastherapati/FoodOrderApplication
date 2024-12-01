@@ -82,6 +82,11 @@ function LoginPage({ setLoggedIn, setUserData }) {
           width: "400px",
           zIndex: 2,
           textAlign: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.8)", // Semi-transparent background
+          backdropFilter: "blur(8px)", // Blur for frosted-glass effect
+          border: "1px solid rgba(255, 255, 255, 0.3)", // Optional border for enhanced visibility
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)", // Softer shadow to match transparency
+          borderRadius: "20px",
         }}
       >
         <Typography variant="h5" gutterBottom>
