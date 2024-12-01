@@ -13,7 +13,7 @@ export default function Meals({ isAdmin, category }) {
     isLoading,
     error,
   } = useHttp(
-    `/api/products/get?category=${category.toUpperCase()}`,
+    `http://localhost:8080/api/products/get?category=${category.toUpperCase()}`,
     requestConfig,
     []
   );

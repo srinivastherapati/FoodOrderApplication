@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "/api";
+const API_BASE_URL = "http://localhost:8080/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
@@ -59,14 +59,26 @@ export const getAllCustomers = async () => {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
+export const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/orders/update-status/${orderId}/${newStatus}`
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
 export const cancelOrder = async (id) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/orders/cancel-order/${id}`,{
-        method:"POST",
-        headers:{ "Content-Type": "application/json" },
+      `${API_BASE_URL}/orders/cancel-order/${id}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
       }
     );
     return await response.data;
@@ -80,6 +92,31 @@ export const updateOrderStatus = async (orderId, newStatus) => {
     const response = await axios.put(
       `https://your-api-endpoint/orders/${orderId}/status`, // Replace with your actual API endpoint
       { status: newStatus } // Payload with the new status
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+
+export const updateQuantity = async (productId, type) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/order-items/update-quantity/${productId}`,
+      { type: type }
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+
+export const deleteProduct = async (productId) => {
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}/products/${productId}`
     );
     return response.data; // Return the response data if needed
   } catch (error) {
