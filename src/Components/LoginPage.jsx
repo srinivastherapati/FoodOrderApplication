@@ -24,7 +24,7 @@ function LoginPage({ setLoggedIn, setUserData }) {
       localStorage.setItem("loggedIn", "true");
       userData.role = "admin";
       localStorage.setItem("userDetails", JSON.stringify(userData));
-      console.log(userData)
+      console.log(userData);
       setUserData(userData);
       setLoggedIn(true);
     } catch (error) {

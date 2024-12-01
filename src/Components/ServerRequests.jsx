@@ -111,3 +111,26 @@ export const deleteProduct = async (productId) => {
     throw error; // Propagate the error to the caller
   }
 };
+
+export const addProduct = async (product) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/products/add`, product);
+    return response; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+
+export const updateProduct = async (productId, product) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}/products/update/${productId}`,
+      product
+    );
+    return response; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};

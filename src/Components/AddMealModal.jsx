@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Box, TextField, Button, Typography } from "@mui/material";
 import useHttp from "../hooks/useHttp";
-import { API_BASE_URL } from "./ServerRequests";
+import { addProduct, updateProduct } from "./ServerRequests";
 
 const modalStyle = {
   position: "absolute",
@@ -41,33 +41,38 @@ export default function AddMealModal({
     }
   }, [currentProduct]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const mealData = { name, imageUrl, description, stock };
+  const handleSubmit = async () => {
+    const productData = {
+      name,
+      imageUrl,
+      description,
+      stock,
+      category: currentProduct.category.toUpperCase(),
+    };
 
     try {
       setIsLoading(true);
       setError(null);
 
       if (!isAdd) {
-        // Edit meal API call
-        await sendRequest(
-          `${API_BASE_URL}/products/update/${currentProduct.id}`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(mealData),
+        try {
+          const response = updateProduct(currentProduct.id, productData);
+          if (response) {
+            alert("Updated Product Successfully ! ");
           }
-        );
-        alert("Meal updated successfully!");
+        } catch (error) {
+          alert("There was an error : " + error);
+        }
       } else {
-        // Add meal API call
-        await sendRequest(`${API_BASE_URL}/products/add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mealData),
-        });
-        alert("Meal added successfully!");
+        console.log("Came Here");
+        try {
+          const response = addProduct(productData);
+          if (response) {
+            alert("Added Product Successfully ! ");
+          }
+        } catch (error) {
+          alert("There was an error : " + error);
+        }
       }
       onAddSuccess(); // Trigger the callback to refresh the list
       onClose(); // Close the modal
@@ -90,7 +95,7 @@ export default function AddMealModal({
         <Typography id="add-meal-modal-title" variant="h6" component="h2">
           {!isAdd ? "Edit Meal" : "Add New Meal"}
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form>
           <TextField
             label="Name"
             fullWidth
@@ -128,10 +133,9 @@ export default function AddMealModal({
           <Button
             variant="contained"
             color="primary"
-            type="submit"
             disabled={isLoading}
             sx={{ marginTop: "20px" }}
-            onClick={() => handleProductRequest()}
+            onClick={() => handleSubmit()}
           >
             {isLoading ? "Processing..." : !isAdd ? "Update Meal" : "Add Meal"}
           </Button>
