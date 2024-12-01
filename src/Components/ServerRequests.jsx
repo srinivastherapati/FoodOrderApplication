@@ -59,6 +59,23 @@ export const getAllCustomers = async () => {
   } catch (e) {
     console.error(e);
   }
+<<<<<<< HEAD
+}
+
+export const cancelOrder = async (id) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/orders/cancel-order/${id}`,{
+        method:"POST",
+        headers:{ "Content-Type": "application/json" },
+      }
+    );
+    return await response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error canceling order");
+  }
+};
+=======
 };
 
 export const updateOrderStatus = async (orderId, newStatus) => {
@@ -73,3 +90,4 @@ export const updateOrderStatus = async (orderId, newStatus) => {
     throw error; // Propagate the error to the caller
   }
 };
+>>>>>>> 5a556044d7af642c4c0fc873e403693da551be4a

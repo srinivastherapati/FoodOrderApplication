@@ -19,25 +19,25 @@ import { getAllCustomers } from "./ServerRequests";
 const styles = {
   container: {
     padding: "20px",
-    backgroundColor: "rgb(42 36 18)",
-    minHeight: "100vh",
-    color: "#d9e2f1",
-    width: "100%",
-  },
-  table: {
-    borderCollapse: "collapse",
+    backgroundColor: "#2e2e2e",
+    color: "#fff",
+    borderRadius: "8px",
   },
   tableHeader: {
-    backgroundColor: "#1d1a16",
-    color: "#d9e2f1",
     fontWeight: "bold",
-  },
-  tableCell: {
-    backgroundColor: "#1d1a16",
-    color: "#d9e2f1",
+    fontSize: "16px",
+    color: "#fff",
+    backgroundColor: "#424242",
     border: "none",
   },
+  tableCell: {
+
+    fontSize: "16px",
+    color: "black",
+    borderBottom: "1px solid #424242",
+  },
 };
+
 
 const AllUsers = () => {
   const [customers, setCustomers] = useState([]);
