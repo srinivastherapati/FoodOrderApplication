@@ -81,6 +81,7 @@ const AllOrders = () => {
               <TableCell style={styles.tableHeader} align="center">
                 Order Date
               </TableCell>
+              <TableCell style={styles.tableHeader}>Order Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -91,6 +92,7 @@ const AllOrders = () => {
                 <TableCell>{order.customerEmail}</TableCell>
                 <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
                 <TableCell>{ new Date(order.orderDate).toLocaleDateString()}</TableCell>
+                <TableCell>{order.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>

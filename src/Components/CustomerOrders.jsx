@@ -68,7 +68,7 @@ const CustomerOrders = () => {
         <Typography variant="h5" gutterBottom>
           {title}
         </Typography>
-        {orders.length > 0 ? (
+        {orders ? (
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -77,6 +77,8 @@ const CustomerOrders = () => {
                   <TableCell>Order ID</TableCell>
                   <TableCell>Order Date</TableCell>
                   <TableCell>Total Amount</TableCell>
+                  <TableCell>Order status</TableCell>
+                
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -101,6 +103,7 @@ const CustomerOrders = () => {
                         {new Date(order.orderDate).toLocaleDateString()}
                       </TableCell>
                       <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
+                      <TableCell>${order.status}</TableCell>
                     </TableRow>
 
                     {/* Collapsible Row for Order Items */}
@@ -143,13 +146,15 @@ const CustomerOrders = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        ) : (
-          <Box textAlign="center" my={3}>
-            <Typography variant="body1" color="textSecondary">
-              No orders at this moment.
-            </Typography>
-          </Box>
-        )}
+        ) : <div style={{ display: "flex", width: "100%" }}>
+        <p
+          style={{
+            justifyContent: "space-around",
+          }}
+        >
+          No Orders at this time
+        </p>
+      </div>}
       </>
     );
   };
