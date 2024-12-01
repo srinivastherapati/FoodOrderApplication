@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,32 +9,11 @@ import {
   TableHead,
   TableRow,
   Paper,
+  CircularProgress
 } from "@mui/material";
-
-// Dummy data for orders
-const orders = [
-  {
-    orderId: "101",
-    customerName: "John Doe",
-    customerEmail: "john.doe@example.com",
-    totalPrice: "$75.00",
-    orderDate: "2024-11-18",
-  },
-  {
-    orderId: "102",
-    customerName: "Jane Smith",
-    customerEmail: "jane.smith@example.com",
-    totalPrice: "$45.00",
-    orderDate: "2024-11-17",
-  },
-  {
-    orderId: "103",
-    customerName: "Alice Brown",
-    customerEmail: "alice.brown@example.com",
-    totalPrice: "$30.00",
-    orderDate: "2024-11-16",
-  },
-];
+import useHttp from "../hooks/useHttp";
+import ErrorPage from "./ErrorPage";
+import { getAllOrders } from "./ServerRequests";
 
 const styles = {
   container: {
@@ -60,6 +39,30 @@ const styles = {
 };
 
 const AllOrders = () => {
+  const [totalOrders, setOrders] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    getAllOrders()
+    .then((data) => {
+      setOrders(data);
+      setLoading(false);
+    })
+    .catch((error) => console.error("Failed to fetch past payments:", error));
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if (error) {
+    return <ErrorPage title="failed to fetch meals" message={error.message} />;
+  }
+
   return (
     <Box style={styles.container}>
       <Typography variant="h4" gutterBottom>
@@ -81,21 +84,13 @@ const AllOrders = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order, idx) => (
-              <TableRow key={idx}>
-                <TableCell style={styles.tableCell}>{order.orderId}</TableCell>
-                <TableCell style={styles.tableCell}>
-                  {order.customerName}
-                </TableCell>
-                <TableCell style={styles.tableCell}>
-                  {order.customerEmail}
-                </TableCell>
-                <TableCell style={styles.tableCell} align="center">
-                  {order.totalPrice}
-                </TableCell>
-                <TableCell style={styles.tableCell} align="center">
-                  {order.orderDate}
-                </TableCell>
+            {totalOrders.map((order) => (
+              <TableRow key={order.orderId}>
+                <TableCell>{order.orderId}</TableCell>
+                <TableCell>{order.customerName}</TableCell>
+                <TableCell>{order.customerEmail}</TableCell>
+                <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
+                <TableCell>{ new Date(order.orderDate).toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>

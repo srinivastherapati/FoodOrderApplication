@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,191 +9,152 @@ import {
   TableHead,
   TableRow,
   Paper,
+  CircularProgress,
+  IconButton,
+  Collapse,
 } from "@mui/material";
-
-// Dummy data for orders
-const orders = [
-  {
-    orderNumber: "001",
-    totalPrice: "$45.00",
-    items: [
-      { name: "Pizza", quantity: 1, price: "$20.00" },
-      { name: "Burger", quantity: 2, price: "$25.00" },
-    ],
-  },
-  {
-    orderNumber: "002",
-    totalPrice: "$60.00",
-    items: [
-      { name: "Pasta", quantity: 3, price: "$30.00" },
-      { name: "Salad", quantity: 2, price: "$30.00" },
-    ],
-  },
-  {
-    orderNumber: "003",
-    totalPrice: "$35.00",
-    items: [
-      { name: "Sushi", quantity: 2, price: "$20.00" },
-      { name: "Soup", quantity: 1, price: "$15.00" },
-    ],
-  },
-];
-
-const styles = {
-  container: {
-    padding: "20px",
-    backgroundColor: "rgb(41 37 25)",
-    minHeight: "100vh",
-    color: "#d9e2f1", // Change text color inside the container to white
-    width: "1000px",
-  },
-  orderBox: {
-    backgroundColor: "#1d1a16", // Background color for order box
-    borderRadius: "10px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    padding: "15px",
-    marginBottom: "20px",
-    color: "#d9e2f1", // Ensure text color is white in order box
-  },
-  orderHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "10px",
-  },
-};
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { getCustomerOrders } from "./ServerRequests.jsx";
+import "./CustomerOrders.css";
 
 const CustomerOrders = () => {
-  return (
-    <Box style={styles.container}>
-      {orders.map((order, index) => (
-        <Box key={index} style={styles.orderBox}>
-          <Box style={styles.orderHeader}>
-            <Typography variant="h6">Order #{order.orderNumber}</Typography>
-            <Typography variant="h6">{order.totalPrice}</Typography>
-          </Box>
-          <TableContainer component={Paper} style={{ boxShadow: "none" }}>
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [openRow, setOpenRow] = useState({}); // Track which rows are expanded
+
+  useEffect(() => {
+    // Fetch orders for the logged-in user
+    const userDetails = localStorage.getItem("userDetails");
+    const userData = JSON.parse(userDetails);
+
+    getCustomerOrders(userData.userId)
+      .then((data) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to fetch past orders.");
+        console.error("Error fetching orders:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  const toggleRow = (orderId) => {
+    setOpenRow((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
+  };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
+
+  const renderTable = (orders, title) => {
+    return (
+      <>
+        <Typography variant="h5" gutterBottom>
+          {title}
+        </Typography>
+        {orders.length > 0 ? (
+          <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell
-                    sx={{
-                      fontSize: "16px",
-                      backgroundColor: "#1d1a16", // Change table header background color
-                      color: "#d9e2f1", // Change table header text color
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Name
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "16px",
-                      backgroundColor: "#1d1a16",
-                      color: "#d9e2f1",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}
-                  >
-                    Quantity
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "16px",
-                      backgroundColor: "#1d1a16",
-                      color: "#d9e2f1",
-                      fontWeight: "bold",
-                      textAlign: "right",
-                    }}
-                  >
-                    Price
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "16px",
-                      backgroundColor: "#1d1a16",
-                      color: "#d9e2f1",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}
-                  >
-                    Rating
-                  </TableCell>
+                  <TableCell />
+                  <TableCell>Order ID</TableCell>
+                  <TableCell>Order Date</TableCell>
+                  <TableCell>Total Amount</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {order.items.map((item, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell
-                      sx={{
-                        fontSize: "16px",
-                        backgroundColor: "#1d1a16", // Change table body background color
-                        color: "#d9e2f1", // Change table body text color
-                      }}
-                    >
-                      {item.name}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        fontSize: "16px",
-                        backgroundColor: "#1d1a16",
-                        color: "#d9e2f1",
-                        textAlign: "center",
-                      }}
-                    >
-                      {item.quantity}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        fontSize: "16px",
-                        backgroundColor: "#1d1a16",
-                        color: "#d9e2f1",
-                        textAlign: "right",
-                      }}
-                    >
-                      {item.price}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        fontSize: "16px",
-                        backgroundColor: "#1d1a16",
-                        color: "#d9e2f1",
-                        textAlign: "center",
-                      }}
-                    >
-                      {/* Dropdown for rating */}
-                      <select
-                        defaultValue=""
-                        style={{
-                          width: "75px",
-                          fontSize: "14px",
-                          borderRadius: "5px",
-                          border: "1px solid #ccc",
-                          padding: "5px",
-                          textAlign: "center",
-                          backgroundColor: "#1d1a16",
-                          color: "white",
-                        }}
+                {orders.map((order) => (
+                  <React.Fragment key={order.orderId}>
+                    {/* Main Order Row */}
+                    <TableRow>
+                      <TableCell>
+                        <IconButton
+                          size="small"
+                          onClick={() => toggleRow(order.orderId)}
+                        >
+                          {openRow[order.orderId] ? (
+                            <KeyboardArrowUp />
+                          ) : (
+                            <KeyboardArrowDown />
+                          )}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>{order.orderId}</TableCell>
+                      <TableCell>
+                        {new Date(order.orderDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
+                    </TableRow>
+
+                    {/* Collapsible Row for Order Items */}
+                    <TableRow>
+                      <TableCell
+                        style={{ paddingBottom: 0, paddingTop: 0 }}
+                        colSpan={4}
                       >
-                        <option value="" disabled>
-                          Select
-                        </option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
-                    </TableCell>
-                  </TableRow>
+                        <Collapse
+                          in={openRow[order.orderId]}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <Box margin={2}>
+                            <Typography variant="subtitle1" gutterBottom>
+                              Order Items
+                            </Typography>
+                            <Table size="small" aria-label="order items">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Product Name</TableCell>
+                                  <TableCell>Quantity</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {order.products.map((product, index) => (
+                                  <TableRow key={index}>
+                                    <TableCell>{product.name}</TableCell>
+                                    <TableCell>{product.quantityBought}</TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </Box>
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-        </Box>
-      ))}
-    </Box>
-  );
+        ) : (
+          <Box textAlign="center" my={3}>
+            <Typography variant="body1" color="textSecondary">
+              No orders at this moment.
+            </Typography>
+          </Box>
+        )}
+      </>
+    );
+  };
+
+  return renderTable(orders, "Your Orders");
 };
 
 export default CustomerOrders;

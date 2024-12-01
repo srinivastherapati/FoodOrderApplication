@@ -1,5 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
+import Buttons from "./UI/Buttons";
 
 const Sidebar = ({ userData, onLogout, currentPage, setCurrentPage }) => {
   return (
@@ -13,22 +14,20 @@ const Sidebar = ({ userData, onLogout, currentPage, setCurrentPage }) => {
           <li onClick={() => setCurrentPage("dairy")}>DAIRY</li>
           <li onClick={() => setCurrentPage("snacks")}>SNACKS</li>
           <li onClick={() => setCurrentPage("gas")}>GAS</li>
-          {!userData.isAdmin && (
+          {userData.role!='admin' && (
             <li onClick={() => setCurrentPage("your-orders")}>YOUR ORDERS</li>
           )}
-          {userData.isAdmin && (
+          {userData.role==='admin' && (
             <li onClick={() => setCurrentPage("all-orders")}> ORDERS</li>
           )}
-          {userData.isAdmin && (
+          {userData.role==='admin' && (
             <li onClick={() => setCurrentPage("all-users")}> USERS</li>
           )}
         </ul>
       </div>
       <div className="sidebar-footer">
         <p className="user-details">{userData.userEmail}</p>
-        <button className="logout-button" onClick={onLogout}>
-          Logout
-        </button>
+        <Buttons onClick={onLogout} >Logout</Buttons>
       </div>
     </div>
   );

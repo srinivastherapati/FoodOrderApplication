@@ -5,7 +5,7 @@ import Checkout from "./Components/Checkout";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Sidebar from "./Components/Sidebar";
-import CustomerOrders from "./Components/AllOrders";
+import CustomerOrders from "./Components/CustomerOrders";
 import AllOrders from "./Components/AllOrders";
 import AllUsers from "./Components/AllUsers";
 import { CartContextProvider } from "./Components/Store/CartContext";
@@ -50,28 +50,28 @@ function App() {
             setCurrentPage={setCurrentPage}
           />
           <div style={{ marginLeft: "250px" }}>
-            <Header isAdmin={userData.isAdmin} />
+            <Header isAdmin={userData.role==='admin'} />
             {currentPage == "food" && (
-              <Meals isAdmin={userData.isAdmin} category={"food"} />
+              <Meals isAdmin={userData.role==='admin'} category={"food"} />
             )}
             {currentPage == "beverages" && (
-              <Meals isAdmin={userData.isAdmin} category={"beverages"} />
+              <Meals isAdmin={userData.role==='admin'} category={"beverages"} />
             )}
             {currentPage == "grocery" && (
-              <Meals isAdmin={userData.isAdmin} category={"grocery"} />
+              <Meals isAdmin={userData.role==='admin'} category={"grocery"} />
             )}
             {currentPage == "dairy" && (
-              <Meals isAdmin={userData.isAdmin} category={"dairy"} />
+              <Meals isAdmin={userData.role==='admin'} category={"dairy"} />
             )}
             {currentPage == "snacks" && (
-              <Meals isAdmin={userData.isAdmin} category={"snacks"} />
+              <Meals isAdmin={userData.role==='admin'} category={"snacks"} />
             )}
             {currentPage == "gas" && (
-              <Meals isAdmin={userData.isAdmin} category={"gas"} />
+              <Meals isAdmin={userData.role==='admin'} category={"gas"} />
             )}
-            {currentPage == "your-orders" && <CustomerOrders />}
-            {userData.isAdmin && currentPage == "all-orders" && <AllOrders />}
-            {userData.isAdmin && currentPage == "all-users" && <AllUsers />}
+            {userData.role!='admin' && currentPage == "your-orders" && <CustomerOrders />}
+            {userData.role==='admin' && currentPage == "all-orders" && <AllOrders />}
+            {userData.role==='admin' && currentPage == "all-users" && <AllUsers />}
             <Cart />
             <Checkout />
           </div>

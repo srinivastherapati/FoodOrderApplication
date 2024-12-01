@@ -1,4 +1,5 @@
 import React from "react";
+import { useState,useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,29 +10,11 @@ import {
   TableHead,
   TableRow,
   Paper,
+  CircularProgress
 } from "@mui/material";
-
-// Dummy data for customers
-const customers = [
-  {
-    customerName: "John Doe",
-    email: "john.doe@example.com",
-    numberOfOrders: 15,
-    lastOrderDate: "2024-11-15",
-  },
-  {
-    customerName: "Jane Smith",
-    email: "jane.smith@example.com",
-    numberOfOrders: 20,
-    lastOrderDate: "2024-11-17",
-  },
-  {
-    customerName: "Alice Brown",
-    email: "alice.brown@example.com",
-    numberOfOrders: 8,
-    lastOrderDate: "2024-11-14",
-  },
-];
+import useHttp from "../hooks/useHttp";
+import ErrorPage from "./ErrorPage";
+import { getAllCustomers } from "./ServerRequests";
 
 const styles = {
   container: {
@@ -57,6 +40,31 @@ const styles = {
 };
 
 const AllUsers = () => {
+  const [customers, setCustomers] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    getAllCustomers()
+    .then((data) => {
+      setCustomers(data);
+      setLoading(false);
+    })
+    .catch((error) => setError(error || "failed to get customers"), error);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if (error) {
+    return <ErrorPage title="failed to fetch meals" message={error.message} />;
+  }
+
+
   return (
     <Box style={styles.container}>
       <Typography variant="h4" gutterBottom>
@@ -67,9 +75,12 @@ const AllUsers = () => {
           <TableHead>
             <TableRow>
               <TableCell style={styles.tableHeader}>Customer Name</TableCell>
-              <TableCell style={styles.tableHeader}>Email</TableCell>
+              <TableCell style={styles.tableHeader}>Customer Email</TableCell>
               <TableCell style={styles.tableHeader} align="center">
                 Number of Orders
+              </TableCell>
+              <TableCell style={styles.tableHeader} align="center">
+                Total Order Value
               </TableCell>
               <TableCell style={styles.tableHeader} align="center">
                 Last Order Date
@@ -82,12 +93,15 @@ const AllUsers = () => {
                 <TableCell style={styles.tableCell}>
                   {customer.customerName}
                 </TableCell>
-                <TableCell style={styles.tableCell}>{customer.email}</TableCell>
+                <TableCell style={styles.tableCell}>{customer.customerEmail}</TableCell>
                 <TableCell style={styles.tableCell} align="center">
                   {customer.numberOfOrders}
                 </TableCell>
                 <TableCell style={styles.tableCell} align="center">
-                  {customer.lastOrderDate}
+                  ${customer.customerTotalOrderValue.toFixed(2)}
+                </TableCell>
+                <TableCell style={styles.tableCell} align="center">
+                  {customer.numberOfOrders!=0 ?new Date(customer.lastOrderDate).toLocaleDateString():"Order not Placed"}
                 </TableCell>
               </TableRow>
             ))}
