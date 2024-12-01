@@ -29,15 +29,18 @@
 }
 
 .sidebar-categories li.active {
-  background-color: #007bff;
-  color: white;
+  background-color: #ffc403;
+  color: black;
   font-weight: bold;
   border-radius: 5px;
 }
 
+.sidebar-categories li.active li:hover {
+  color: black;
+}
 
 .sidebar-categories li:hover {
-  color: yellow;
+  font-weight: bold;
 }
 
 .sidebar-footer {
