@@ -13,7 +13,7 @@ import {
 import useHttp from "../hooks/useHttp";
 import ErrorPage from "./ErrorPage";
 import { getAllCustomers } from "./ServerRequests";
-import "./customerorders.css"; // Import the CSS file
+import "./customerorders.css"; 
 
 const styles = {
   container: {
@@ -64,7 +64,7 @@ const AllUsers = () => {
   }
 
   return (
-    <Box className="orders-container">
+    <Box className={styles.container}>
       <TableContainer>
         <Table className="MuiTable-root">
           <TableHead className="MuiTableHead-root">

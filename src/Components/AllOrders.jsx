@@ -18,23 +18,24 @@ import { getAllOrders, updateOrderStatus } from "./ServerRequests"; // Assume yo
 const styles = {
   container: {
     padding: "20px",
-    backgroundColor: "rgb(42 36 18)",
+    backgroundColor: "#2e2e2e",
     minHeight: "100vh",
-    color: "#d9e2f1",
+    color: "#fff",
     width: "100%",
   },
   table: {
     borderCollapse: "collapse",
   },
   tableHeader: {
-    backgroundColor: "#1d1a16",
-    color: "#d9e2f1",
+    backgroundColor: "##2e2e2e",
+    color: "#fff",
     fontWeight: "bold",
   },
   tableCell: {
-    backgroundColor: "#1d1a16",
-    color: "#d9e2f1",
+    backgroundColor: "black",
+    color: "black",
     border: "none",
+    fontsize:"15px"
   },
 };
 
