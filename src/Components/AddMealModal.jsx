@@ -54,7 +54,7 @@ export default function AddMealModal({
         await sendRequest(
           `${API_BASE_URL}/products/update/${currentProduct.id}`,
           {
-            method: "PUT",
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(mealData),
           }
@@ -88,7 +88,7 @@ export default function AddMealModal({
     >
       <Box sx={modalStyle}>
         <Typography id="add-meal-modal-title" variant="h6" component="h2">
-          {isAdd ? "Edit Meal" : "Add New Meal"}
+          {!isAdd ? "Edit Meal" : "Add New Meal"}
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -133,7 +133,7 @@ export default function AddMealModal({
             sx={{ marginTop: "20px" }}
             onClick={() => handleProductRequest()}
           >
-            {isLoading ? "Processing..." : isAdd ? "Update Meal" : "Add Meal"}
+            {isLoading ? "Processing..." : !isAdd ? "Update Meal" : "Add Meal"}
           </Button>
         </form>
       </Box>
