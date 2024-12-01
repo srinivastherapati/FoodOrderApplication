@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "/api";
+const API_BASE_URL = "http://localhost:8080/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
@@ -61,6 +61,17 @@ export const getAllCustomers = async () => {
   }
 };
 
+export const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/orders/update-status/${orderId}/${newStatus}`
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
 export const cancelOrder = async (id) => {
   try {
     const response = await axios.post(

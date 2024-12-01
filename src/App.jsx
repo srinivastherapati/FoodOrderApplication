@@ -49,7 +49,8 @@ function App() {
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
-          <div style={{ marginLeft: "250px" }}>
+          
+          <div style={{ marginLeft: "250px", width: "calc(100% - 250px)" }}>
             <Header isAdmin={userData.role==='admin'} />
             {currentPage == "food" && (
               <Meals isAdmin={userData.role==='admin'} category={"food"} />
