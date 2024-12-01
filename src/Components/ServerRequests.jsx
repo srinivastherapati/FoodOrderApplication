@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
@@ -84,19 +84,6 @@ export const cancelOrder = async (id) => {
     return await response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Error canceling order");
-  }
-};
-
-export const updateOrderStatus = async (orderId, newStatus) => {
-  try {
-    const response = await axios.put(
-      `https://your-api-endpoint/orders/${orderId}/status`, // Replace with your actual API endpoint
-      { status: newStatus } // Payload with the new status
-    );
-    return response.data; // Return the response data if needed
-  } catch (error) {
-    console.error("Error updating order status:", error);
-    throw error; // Propagate the error to the caller
   }
 };
 

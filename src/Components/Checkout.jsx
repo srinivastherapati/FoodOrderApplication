@@ -6,6 +6,7 @@ import Input from "./UI/Input";
 import UserProgressContext from "./Store/UserProgressContext";
 import useHttp from "../hooks/useHttp";
 import ErrorPage from "./ErrorPage";
+import { API_BASE_URL } from "./ServerRequests";
 
 const requestConfig = {
   method: "POST",
@@ -22,7 +23,7 @@ export default function Checkout() {
   const userId = JSON.parse(localStorage.getItem("userDetails")).userId;
 
   const { response, isLoading, error, sendRequest, clearData } = useHttp(
-    `http://localhost:8080/api/orders/place/${userId}`,
+    `${API_BASE_URL}/orders/place/${userId}`,
     requestConfig
   );
 
