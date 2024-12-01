@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://major-goats-wonder.loca.lt/api",
+        target: "https://cute-guests-cough.loca.lt/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

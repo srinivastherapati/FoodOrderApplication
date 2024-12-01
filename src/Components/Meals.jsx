@@ -19,8 +19,10 @@ export default function Meals({ isAdmin, category }) {
     []
   );
 
+  let isAdd = false;
+
   const [showAddModal, setShowAddModal] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null); // To store product for editing
+  const [currentProduct, setCurrentProduct] = useState(""); // To store product for editing
 
   const handleAddMealSuccess = () => {
     setShowAddModal(false);
@@ -37,7 +39,21 @@ export default function Meals({ isAdmin, category }) {
 
   const handleEditMeal = (product) => {
     setCurrentProduct(product);
+    isAdd = false;
     setShowAddModal(true); // Open modal for editing
+  };
+
+  const handleAddMeal = (product) => {
+    setCurrentProduct({
+      name: "",
+      imageUrl: "",
+      stock: 1,
+      description: "",
+      category: category,
+      price: "",
+    });
+    isAdd = true;
+    setShowAddModal(true);
   };
 
   return (
@@ -47,7 +63,7 @@ export default function Meals({ isAdmin, category }) {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => setShowAddModal(true)}
+            onClick={() => handleAddMeal()}
             sx={{ marginBottom: "20px" }}
           >
             Add New Meal
@@ -57,6 +73,7 @@ export default function Meals({ isAdmin, category }) {
             onClose={() => setShowAddModal(false)}
             onAddSuccess={handleAddMealSuccess}
             currentProduct={currentProduct}
+            isAdd={isAdd}
           />
         </>
       )}

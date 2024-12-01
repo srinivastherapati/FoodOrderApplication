@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Box, TextField, Button, Typography } from "@mui/material";
 import useHttp from "../hooks/useHttp";
+import { API_BASE_URL } from "./ServerRequests";
 
 const modalStyle = {
   position: "absolute",
@@ -19,11 +20,12 @@ export default function AddMealModal({
   onClose,
   onAddSuccess,
   currentProduct,
+  isAdd,
 }) {
-  const [name, setName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [name, setName] = useState(currentProduct.name);
+  const [imageUrl, setImageUrl] = useState(currentProduct.imageUrl);
+  const [description, setDescription] = useState(currentProduct.description);
+  const [stock, setstock] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,22 +37,22 @@ export default function AddMealModal({
       setName(currentProduct.name);
       setImageUrl(currentProduct.imageUrl);
       setDescription(currentProduct.description);
-      setQuantity(currentProduct.quantity || 1);
+      setstock(currentProduct.stock || 1);
     }
   }, [currentProduct]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const mealData = { name, imageUrl, description, quantity };
+    const mealData = { name, imageUrl, description, stock };
 
     try {
       setIsLoading(true);
       setError(null);
 
-      if (currentProduct) {
+      if (!isAdd) {
         // Edit meal API call
         await sendRequest(
-          `/api/products/edit/${currentProduct.id}`,
+          `${API_BASE_URL}/products/update/${currentProduct.id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -60,14 +62,11 @@ export default function AddMealModal({
         alert("Meal updated successfully!");
       } else {
         // Add meal API call
-        await sendRequest(
-          "/api/products/add",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(mealData),
-          }
-        );
+        await sendRequest(`${API_BASE_URL}/products/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(mealData),
+        });
         alert("Meal added successfully!");
       }
       onAddSuccess(); // Trigger the callback to refresh the list
@@ -89,7 +88,7 @@ export default function AddMealModal({
     >
       <Box sx={modalStyle}>
         <Typography id="add-meal-modal-title" variant="h6" component="h2">
-          {currentProduct ? "Edit Meal" : "Add New Meal"}
+          {isAdd ? "Edit Meal" : "Add New Meal"}
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -117,12 +116,12 @@ export default function AddMealModal({
             required
           />
           <TextField
-            label="Quantity"
+            label="Stock"
             fullWidth
             margin="normal"
             type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Math.max(1, e.target.value))}
+            value={stock}
+            onChange={(e) => setstock(Math.max(1, e.target.value))}
             required
           />
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -132,8 +131,9 @@ export default function AddMealModal({
             type="submit"
             disabled={isLoading}
             sx={{ marginTop: "20px" }}
+            onClick={() => handleProductRequest()}
           >
-            {isLoading ? "Processing..." : currentProduct ? "Update Meal" : "Add Meal"}
+            {isLoading ? "Processing..." : isAdd ? "Update Meal" : "Add Meal"}
           </Button>
         </form>
       </Box>
