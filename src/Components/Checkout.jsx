@@ -22,7 +22,7 @@ export default function Checkout() {
   const userId = JSON.parse(localStorage.getItem("userDetails")).userId;
 
   const { response, isLoading, error, sendRequest, clearData } = useHttp(
-    `/api/orders/place/${userId}`,
+    `http://localhost:8080/api/orders/place/${userId}`,
     requestConfig
   );
 

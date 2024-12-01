@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "/api";
+const API_BASE_URL = "http://localhost:8080/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
@@ -59,9 +59,19 @@ export const getAllCustomers = async () => {
   } catch (e) {
     console.error(e);
   }
-<<<<<<< HEAD
-}
+};
 
+export const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/orders/update-status/${orderId}/${newStatus}`
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
 export const cancelOrder = async (id) => {
   try {
     const response = await axios.post(
@@ -75,19 +85,3 @@ export const cancelOrder = async (id) => {
     throw new Error(error.response?.data?.message || "Error canceling order");
   }
 };
-=======
-};
-
-export const updateOrderStatus = async (orderId, newStatus) => {
-  try {
-    const response = await axios.put(
-      `https://your-api-endpoint/orders/${orderId}/status`, // Replace with your actual API endpoint
-      { status: newStatus } // Payload with the new status
-    );
-    return response.data; // Return the response data if needed
-  } catch (error) {
-    console.error("Error updating order status:", error);
-    throw error; // Propagate the error to the caller
-  }
-};
->>>>>>> 5a556044d7af642c4c0fc873e403693da551be4a

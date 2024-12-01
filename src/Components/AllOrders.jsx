@@ -39,10 +39,10 @@ const styles = {
 };
 
 const statusOptions = [
-  "Preparing",
-  "Ready",
-  "Delivered",
-  "Cancel",
+  "PREPARING",
+  "READY",
+  "DELIVERED",
+  "CANCEL",
   "Cancelled (By User)",
   "Cancelled (By Admin)",
 ];
@@ -51,15 +51,6 @@ const AllOrders = () => {
   const [totalOrders, setOrders] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    getAllOrders()
-      .then((data) => {
-        setOrders(data);
-        setLoading(false);
-      })
-      .catch((error) => console.error("Failed to fetch orders:", error));
-  }, []);
 
   const handleStatusChange = (orderId, newStatus) => {
     updateOrderStatus(orderId, newStatus)
@@ -74,6 +65,16 @@ const AllOrders = () => {
         console.error("Failed to update order status:", error);
       });
   };
+
+  useEffect(() => {
+    getAllOrders()
+      .then((data) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch((error) => console.error("Failed to fetch orders:", error));
+  }, []);
+
 
   if (isLoading) {
     return (
@@ -113,7 +114,7 @@ const AllOrders = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {totalOrders.map((order) => (
+            {totalOrders ?totalOrders.map((order) => (
               <TableRow key={order.orderId}>
                 <TableCell>{order.orderId}</TableCell>
                 <TableCell>{order.customerName}</TableCell>
@@ -130,7 +131,8 @@ const AllOrders = () => {
                     }
                     disabled={
                       order.status === "Cancelled (By User)" ||
-                      order.status === "Cancelled (By Admin)"
+                      order.status === "Cancelled (By Admin)" ||
+                      order.status==="DELIVERED"
                     }
                     style={{
                       backgroundColor: "#1d1a16",
@@ -147,7 +149,17 @@ const AllOrders = () => {
                   </select>
                 </TableCell>
               </TableRow>
-            ))}
+            )):  (
+              <div style={{ display: "flex", width: "100%" }}>
+                <p
+                  style={{
+                    justifyContent: "space-around",
+                  }}
+                >
+                  No Orders at this time
+                </p>
+              </div>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
