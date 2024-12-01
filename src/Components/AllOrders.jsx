@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,11 +9,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import useHttp from "../hooks/useHttp";
 import ErrorPage from "./ErrorPage";
-import { getAllOrders } from "./ServerRequests";
+import { getAllOrders, updateOrderStatus } from "./ServerRequests"; // Assume you have an API call for updating status
 
 const styles = {
   container: {
@@ -21,7 +21,7 @@ const styles = {
     backgroundColor: "rgb(42 36 18)",
     minHeight: "100vh",
     color: "#d9e2f1",
-    width: "150%",
+    width: "100%",
   },
   table: {
     borderCollapse: "collapse",
@@ -38,6 +38,15 @@ const styles = {
   },
 };
 
+const statusOptions = [
+  "Preparing",
+  "Ready",
+  "Delivered",
+  "Cancel",
+  "Cancelled (By User)",
+  "Cancelled (By Admin)",
+];
+
 const AllOrders = () => {
   const [totalOrders, setOrders] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -45,22 +54,41 @@ const AllOrders = () => {
 
   useEffect(() => {
     getAllOrders()
-    .then((data) => {
-      setOrders(data);
-      setLoading(false);
-    })
-    .catch((error) => console.error("Failed to fetch past payments:", error));
+      .then((data) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch((error) => console.error("Failed to fetch orders:", error));
   }, []);
+
+  const handleStatusChange = (orderId, newStatus) => {
+    updateOrderStatus(orderId, newStatus)
+      .then(() => {
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.orderId === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+      })
+      .catch((error) => {
+        console.error("Failed to update order status:", error);
+      });
+  };
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
   }
   if (error) {
-    return <ErrorPage title="failed to fetch meals" message={error.message} />;
+    return <ErrorPage title="Failed to fetch orders" message={error.message} />;
   }
 
   return (
@@ -91,8 +119,33 @@ const AllOrders = () => {
                 <TableCell>{order.customerName}</TableCell>
                 <TableCell>{order.customerEmail}</TableCell>
                 <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
-                <TableCell>{ new Date(order.orderDate).toLocaleDateString()}</TableCell>
-                <TableCell>{order.status}</TableCell>
+                <TableCell>
+                  {new Date(order.orderDate).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      handleStatusChange(order.orderId, e.target.value)
+                    }
+                    disabled={
+                      order.status === "Cancelled (By User)" ||
+                      order.status === "Cancelled (By Admin)"
+                    }
+                    style={{
+                      backgroundColor: "#1d1a16",
+                      color: "#d9e2f1",
+                      border: "none",
+                      padding: "5px",
+                    }}
+                  >
+                    {statusOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

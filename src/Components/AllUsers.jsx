@@ -1,5 +1,5 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import useHttp from "../hooks/useHttp";
 import ErrorPage from "./ErrorPage";
@@ -46,16 +46,21 @@ const AllUsers = () => {
 
   useEffect(() => {
     getAllCustomers()
-    .then((data) => {
-      setCustomers(data);
-      setLoading(false);
-    })
-    .catch((error) => setError(error || "failed to get customers"), error);
+      .then((data) => {
+        setCustomers(data);
+        setLoading(false);
+      })
+      .catch((error) => setError(error || "failed to get customers"), error);
   }, []);
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -63,7 +68,6 @@ const AllUsers = () => {
   if (error) {
     return <ErrorPage title="failed to fetch meals" message={error.message} />;
   }
-
 
   return (
     <Box style={styles.container}>
@@ -93,7 +97,9 @@ const AllUsers = () => {
                 <TableCell style={styles.tableCell}>
                   {customer.customerName}
                 </TableCell>
-                <TableCell style={styles.tableCell}>{customer.customerEmail}</TableCell>
+                <TableCell style={styles.tableCell}>
+                  {customer.customerEmail}
+                </TableCell>
                 <TableCell style={styles.tableCell} align="center">
                   {customer.numberOfOrders}
                 </TableCell>
@@ -101,7 +107,9 @@ const AllUsers = () => {
                   ${customer.customerTotalOrderValue.toFixed(2)}
                 </TableCell>
                 <TableCell style={styles.tableCell} align="center">
-                  {customer.numberOfOrders!=0 ?new Date(customer.lastOrderDate).toLocaleDateString():"Order not Placed"}
+                  {customer.numberOfOrders != 0
+                    ? new Date(customer.lastOrderDate).toLocaleDateString()
+                    : "Order not Placed"}
                 </TableCell>
               </TableRow>
             ))}

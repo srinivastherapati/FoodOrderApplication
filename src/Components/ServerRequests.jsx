@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
@@ -27,44 +27,39 @@ export const loginUser = async (credentials) => {
   }
 };
 
-export const getCustomerOrders=async (id)=>{
-  try{
-    const response= await axios.get(`${API_BASE_URL}/orders/customer/${id}`,{
-      method:"GET",
-      headers:{ "Content-Type": "application/json" },
-    }
-    );
+export const getCustomerOrders = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/orders/customer/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
     return await response.data;
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
   }
-}
-export const getAllOrders=async ()=>{
-  try{
-    const response= await axios.get(`${API_BASE_URL}/orders/get`,{
-      method:"GET",
-      headers:{ "Content-Type": "application/json" },
-    }
-    );
+};
+export const getAllOrders = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/orders/get`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
     return await response.data;
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
   }
-}
-export const getAllCustomers=async ()=>{
-  try{
-    const response= await axios.get(`${API_BASE_URL}/customer/get`,{
-      method:"GET",
-      headers:{ "Content-Type": "application/json" },
-    }
-    );
+};
+export const getAllCustomers = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/customer/get`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
     return await response.data;
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
   }
+<<<<<<< HEAD
 }
 
 export const cancelOrder = async (id) => {
@@ -80,3 +75,19 @@ export const cancelOrder = async (id) => {
     throw new Error(error.response?.data?.message || "Error canceling order");
   }
 };
+=======
+};
+
+export const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    const response = await axios.put(
+      `https://your-api-endpoint/orders/${orderId}/status`, // Replace with your actual API endpoint
+      { status: newStatus } // Payload with the new status
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+>>>>>>> 5a556044d7af642c4c0fc873e403693da551be4a
