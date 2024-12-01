@@ -3,7 +3,7 @@ import useHttp from "../hooks/useHttp.jsx";
 import ErrorPage from "./ErrorPage.jsx";
 import MealItem from "./MealItem.jsx";
 import AddMealModal from "./AddMealModal.jsx";
-import { Button } from "@mui/material";
+import { Button, TextField, Select, MenuItem, Box } from "@mui/material";
 import { API_BASE_URL } from "./ServerRequests.jsx";
 
 const requestConfig = {};
@@ -19,14 +19,53 @@ export default function Meals({ isAdmin, category }) {
     []
   );
 
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null); // To store product for editing
+  const [currentProduct, setCurrentProduct] = useState(null);
+
+  const products = loadProducts || [];
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const lowerCaseQuery = query.toLowerCase();
+    const matchedProducts = products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(lowerCaseQuery) ||
+        product.description.toLowerCase().includes(lowerCaseQuery)
+    );
+    setFilteredProducts(matchedProducts);
+  };
+
+  const handleSort = (option) => {
+    setSortOption(option);
+    const sortedProducts = [...(filteredProducts.length ? filteredProducts : products)];
+
+    if (option === "A-Z") {
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (option === "Z-A") {
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (option === "price: low to high") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else if (option === "price: high to low") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    }
+
+    setFilteredProducts(sortedProducts);
+  };
 
   const handleAddMealSuccess = () => {
     setShowAddModal(false);
-    // Logic to refresh the product list
-    window.location.reload(); // Reload the page to fetch the latest list
+    window.location.reload();
   };
+
+  const handleEditMeal = (product) => {
+    setCurrentProduct(product);
+    setShowAddModal(true);
+  };
+
+  const displayedProducts = searchQuery || sortOption ? filteredProducts : products;
 
   if (isLoading) {
     return <p className="center">Fetching {category} Products....</p>;
@@ -35,38 +74,99 @@ export default function Meals({ isAdmin, category }) {
     return <ErrorPage title="failed to fetch meals" message={error.message} />;
   }
 
-  const handleEditMeal = (product) => {
-    setCurrentProduct(product);
-    setShowAddModal(true); // Open modal for editing
-  };
-
   return (
     <>
-      {isAdmin && (
-        <>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setShowAddModal(true)}
-            sx={{ marginBottom: "20px" }}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+        }}
+      >
+        {/* Search Bar */}
+        <TextField
+          label="Search Meals"
+          variant="outlined"
+          size="small"
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+          sx={{
+            flex: 1, // Take available space
+            maxWidth: "500px", // Ensure consistent width
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            color: "black",
+            borderRadius: "10px",
+            height: "40px", // Consistent height
+            marginLeft: "72px",
+          }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
+          inputProps={{
+            style: { color: "black" },
+          }}
+        />
+
+        {/* Sort and Add Meal */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Select
+            value={sortOption}
+            onChange={(e) => handleSort(e.target.value)}
+            size="small"
+            displayEmpty
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.8)",
+              color: "black",
+              borderRadius: "10px",
+              height: "40px", // Align height
+              "& .MuiSelect-icon": { color: "black" },
+            }}
+            renderValue={(selected) => selected || "Sort By"}
           >
-            Add New Meal
-          </Button>
-          <AddMealModal
-            open={showAddModal}
-            onClose={() => setShowAddModal(false)}
-            onAddSuccess={handleAddMealSuccess}
-            currentProduct={currentProduct}
-          />
-        </>
-      )}
+            <MenuItem value="A-Z">A-Z</MenuItem>
+            <MenuItem value="Z-A">Z-A</MenuItem>
+            <MenuItem value="price: low to high">Price: Low to High</MenuItem>
+            <MenuItem value="price: high to low">Price: High to Low</MenuItem>
+          </Select>
+          {isAdmin && (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#ffc404",
+                color: "black",
+                borderRadius: "10px",
+                height: "40px", // Align height
+                "&:hover": { backgroundColor: "#e6b800" },
+                marginRight: "78px",
+              }}
+              onClick={() => {
+                setCurrentProduct(null);
+                setShowAddModal(true);
+              }}
+            >
+              Add New Meal
+            </Button>
+          )}
+        </Box>
+      </Box>
+
+      {/* Add Meal Modal */}
+      <AddMealModal
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAddSuccess={handleAddMealSuccess}
+        currentProduct={currentProduct}
+      />
+
+      {/* Meal List */}
       <ul id="meals">
-        {loadProducts.map((product) => (
+        {displayedProducts.map((product) => (
           <MealItem
             isAdmin={isAdmin}
             key={product.id}
             product={product}
-            onEdit={handleEditMeal} // Pass edit handler to MealItem
+            onEdit={handleEditMeal}
           />
         ))}
       </ul>
