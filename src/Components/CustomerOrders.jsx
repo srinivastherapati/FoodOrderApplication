@@ -16,6 +16,7 @@ import {
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { getCustomerOrders } from "./ServerRequests.jsx";
 import "./CustomerOrders.css";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -46,7 +47,12 @@ const CustomerOrders = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -54,7 +60,12 @@ const CustomerOrders = () => {
 
   if (error) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <Typography variant="h6" color="error">
           {error}
         </Typography>
@@ -78,7 +89,6 @@ const CustomerOrders = () => {
                   <TableCell>Order Date</TableCell>
                   <TableCell>Total Amount</TableCell>
                   <TableCell>Order status</TableCell>
-                
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -103,7 +113,12 @@ const CustomerOrders = () => {
                         {new Date(order.orderDate).toLocaleDateString()}
                       </TableCell>
                       <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
-                      <TableCell>${order.status}</TableCell>
+                      <TableCell>
+                        {order.status}{" "}
+                        {order.status.toLowerCase() === "placed" && (
+                          <ClearIcon />
+                        )}
+                      </TableCell>
                     </TableRow>
 
                     {/* Collapsible Row for Order Items */}
@@ -132,7 +147,9 @@ const CustomerOrders = () => {
                                 {order.products.map((product, index) => (
                                   <TableRow key={index}>
                                     <TableCell>{product.name}</TableCell>
-                                    <TableCell>{product.quantityBought}</TableCell>
+                                    <TableCell>
+                                      {product.quantityBought}
+                                    </TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -146,15 +163,17 @@ const CustomerOrders = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        ) : <div style={{ display: "flex", width: "100%" }}>
-        <p
-          style={{
-            justifyContent: "space-around",
-          }}
-        >
-          No Orders at this time
-        </p>
-      </div>}
+        ) : (
+          <div style={{ display: "flex", width: "100%" }}>
+            <p
+              style={{
+                justifyContent: "space-around",
+              }}
+            >
+              No Orders at this time
+            </p>
+          </div>
+        )}
       </>
     );
   };
