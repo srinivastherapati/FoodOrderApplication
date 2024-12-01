@@ -7,6 +7,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
+import { deleteProduct } from "./ServerRequests";
 
 export default function MealItem({ product, isAdmin }) {
   const cartContxt = useContext(CartContext);
@@ -22,15 +23,32 @@ export default function MealItem({ product, isAdmin }) {
   }
 
   function handleDelete() {
-    console.log("Delete meal:", product);
+    try {
+      console.log("Delete meal:", product);
+      deleteProduct(product.id);
+    } catch (error) {
+      alert("Error : " + error);
+    }
     // Logic for deleting the meal
   }
 
   function incrementQuantity() {
+    try {
+      updateQuantity(quantity, "increment");
+      alert("Sucessfully updated quantity");
+    } catch (error) {
+      alert("There was an error : " + error);
+    }
     setQuantity((prevQuantity) => prevQuantity + 1);
   }
 
   function decrementQuantity() {
+    try {
+      updateQuantity(quantity, "decrement");
+      alert("Sucessfully updated quantity");
+    } catch (error) {
+      alert("There was an error : " + error);
+    }
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   }
 
