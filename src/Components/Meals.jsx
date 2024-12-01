@@ -142,6 +142,7 @@ export default function Meals({ isAdmin, category }) {
               borderRadius: "10px",
               height: "40px", // Align height
               "& .MuiSelect-icon": { color: "black" },
+              marginRight: isAdmin ? "0px" : "78px",
             }}
             renderValue={(selected) => selected || "Sort By"}
           >
