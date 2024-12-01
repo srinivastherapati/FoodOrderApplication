@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+export const API_BASE_URL = "/api";
 // Register user
 export const registerUser = async (userData) => {
   try {
@@ -75,13 +75,39 @@ export const updateOrderStatus = async (orderId, newStatus) => {
 export const cancelOrder = async (id) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/orders/cancel-order/${id}`,{
-        method:"POST",
-        headers:{ "Content-Type": "application/json" },
+      `${API_BASE_URL}/orders/cancel-order/${id}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
       }
     );
     return await response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Error canceling order");
+  }
+};
+
+export const updateQuantity = async (productId, type) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/order-items/update-quantity/${productId}`,
+      { type: type }
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+
+export const deleteProduct = async (productId) => {
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}/products/${productId}`
+    );
+    return response.data; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
   }
 };

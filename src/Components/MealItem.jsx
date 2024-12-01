@@ -7,30 +7,43 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
+import { deleteProduct } from "./ServerRequests";
 
-export default function MealItem({ product, isAdmin }) {
+export default function MealItem({ product, isAdmin, onEdit }) {
   const cartContxt = useContext(CartContext);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(product.stock);
 
   function handleAddMeal() {
     cartContxt.addItems({ ...product, quantity });
   }
 
-  function handleEdit() {
-    console.log("Edit meal:", product);
-    // Logic for editing the meal can go here (e.g., opening a modal for editing)
-  }
-
   function handleDelete() {
-    console.log("Delete meal:", product);
+    try {
+      console.log("Delete meal:", product);
+      deleteProduct(product.id);
+    } catch (error) {
+      alert("Error : " + error);
+    }
     // Logic for deleting the meal
   }
 
   function incrementQuantity() {
+    try {
+      updateQuantity(quantity, "increment");
+      alert("Sucessfully updated quantity");
+    } catch (error) {
+      alert("There was an error : " + error);
+    }
     setQuantity((prevQuantity) => prevQuantity + 1);
   }
 
   function decrementQuantity() {
+    try {
+      updateQuantity(quantity, "decrement");
+      alert("Sucessfully updated quantity");
+    } catch (error) {
+      alert("There was an error : " + error);
+    }
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   }
 
@@ -55,7 +68,7 @@ export default function MealItem({ product, isAdmin }) {
             <div className="admin-actions">
               <EditIcon
                 sx={{ color: "#ffc404" }}
-                onClick={handleEdit}
+                onClick={() => onEdit(product)} // Call onEdit when Edit button is clicked
                 aria-label="Edit"
               />
               <div className="quantity-controls">
@@ -64,7 +77,7 @@ export default function MealItem({ product, isAdmin }) {
                   onClick={decrementQuantity}
                   aria-label="Decrease Quantity"
                 />
-                <p>{quantity}</p>
+                <p>{product.stock}</p>
                 <AddIcon
                   sx={{ color: "#ffc404" }}
                   onClick={incrementQuantity}

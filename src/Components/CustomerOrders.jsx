@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -24,11 +24,6 @@ const CustomerOrders = () => {
   const [error, setError] = useState("");
   const [openRow, setOpenRow] = useState({}); // Track which rows are expanded
 
-  function handleCancelOrder(id) {
-    cancelOrder(id);
-    alert("Order Cancelled, Refund Initiated");
-  }
-
   useEffect(() => {
     // Fetch orders for the logged-in user
     const userDetails = localStorage.getItem("userDetails");
@@ -44,7 +39,12 @@ const CustomerOrders = () => {
         console.error("Error fetching orders:", error);
         setLoading(false);
       });
-  }, [handleCancelOrder]);
+  }, []);
+
+  const handleCancelOrder = useCallback((id) => {
+    cancelOrder(id);
+    alert("Order Cancelled, Refund Initiated");
+  }, []);
 
   const toggleRow = (orderId) => {
     setOpenRow((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
