@@ -1,6 +1,7 @@
 import useHttp from "../hooks/useHttp.jsx";
 import ErrorPage from "./ErrorPage.jsx";
 import MealItem from "./MealItem.jsx";
+import { API_BASE_URL } from "./ServerRequests.jsx";
 
 const requestConfig = {};
 
@@ -10,7 +11,7 @@ export default function Meals({ isAdmin, category }) {
     isLoading,
     error,
   } = useHttp(
-    `http://localhost:8080/api/products/get?category=${category.toUpperCase()}`,
+    `${API_BASE_URL}/products/get?category=${category.toUpperCase()}`,
     requestConfig,
     []
   );
