@@ -15,6 +15,29 @@ import ErrorPage from "./ErrorPage";
 import { getAllCustomers } from "./ServerRequests";
 import "./customerorders.css"; // Import the CSS file
 
+const styles = {
+  container: {
+    padding: "20px",
+    backgroundColor: "#2e2e2e",
+    color: "#fff",
+    borderRadius: "8px",
+  },
+  tableHeader: {
+    fontWeight: "bold",
+    fontSize: "16px",
+    color: "#fff",
+    backgroundColor: "#424242",
+    border: "none",
+  },
+  tableCell: {
+
+    fontSize: "16px",
+    color: "black",
+    borderBottom: "1px solid #424242",
+  },
+};
+
+
 const AllUsers = () => {
   const [customers, setCustomers] = useState([]);
   const [isLoading, setLoading] = useState(true);

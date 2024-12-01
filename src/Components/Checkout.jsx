@@ -83,6 +83,11 @@ export default function Checkout() {
       </Modal>
     );
   }
+  // else if (error) {
+  //   alert("Something went wrong ! Please try again ");
+  //   // window.location.reload();
+  //   // userPrgrs.hideCart();
+  // }
 
   return (
     <Modal open={userPrgrs.progress === "checkout"}>
@@ -101,7 +106,7 @@ export default function Checkout() {
         <Input id="Name on Card" type="text" label="Name On Card"></Input>
         <Input id="CVV" type="text" label="CVV"></Input>
         <Input id="expiry" type="text" label="expiry"></Input>
-        {error && <ErrorPage title="failed to place order" message={error} />}
+        {/* {error && <ErrorPage title="failed to place order" message={error} />} */}
         <p className="modal-actions">{actions}</p>
       </form>
     </Modal>

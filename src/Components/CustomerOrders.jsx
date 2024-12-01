@@ -14,14 +14,20 @@ import {
   Collapse,
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { getCustomerOrders } from "./ServerRequests.jsx";
+import { cancelOrder, getCustomerOrders } from "./ServerRequests.jsx";
 import "./CustomerOrders.css";
+import Buttons from "./UI/Buttons.jsx";
 
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [openRow, setOpenRow] = useState({}); // Track which rows are expanded
+
+  function handleCancelOrder(id) {
+    cancelOrder(id);
+    alert("Order Cancelled, Refund Initiated");
+  }
 
   useEffect(() => {
     // Fetch orders for the logged-in user
@@ -38,7 +44,7 @@ const CustomerOrders = () => {
         console.error("Error fetching orders:", error);
         setLoading(false);
       });
-  }, []);
+  }, [handleCancelOrder]);
 
   const toggleRow = (orderId) => {
     setOpenRow((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
@@ -46,7 +52,12 @@ const CustomerOrders = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -54,7 +65,12 @@ const CustomerOrders = () => {
 
   if (error) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <Typography variant="h6" color="error">
           {error}
         </Typography>
@@ -78,7 +94,7 @@ const CustomerOrders = () => {
                   <TableCell>Order Date</TableCell>
                   <TableCell>Total Amount</TableCell>
                   <TableCell>Order status</TableCell>
-                
+                  <TableCell> Cancel Order</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -103,7 +119,20 @@ const CustomerOrders = () => {
                         {new Date(order.orderDate).toLocaleDateString()}
                       </TableCell>
                       <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
-                      <TableCell>${order.status}</TableCell>
+                      <TableCell>{order.status}</TableCell>
+                      <TableCell>
+                        {order.status === "PLACED" ||
+                        order.status === "READY" ||
+                        order.status === "PREPARING" ? (
+                          <Buttons
+                            onClick={() => handleCancelOrder(order.orderId)}
+                          >
+                            Cancel
+                          </Buttons>
+                        ) : (
+                          "Cancel"
+                        )}
+                      </TableCell>
                     </TableRow>
 
                     {/* Collapsible Row for Order Items */}
@@ -132,7 +161,9 @@ const CustomerOrders = () => {
                                 {order.products.map((product, index) => (
                                   <TableRow key={index}>
                                     <TableCell>{product.name}</TableCell>
-                                    <TableCell>{product.quantityBought}</TableCell>
+                                    <TableCell>
+                                      {product.quantityBought}
+                                    </TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -146,15 +177,17 @@ const CustomerOrders = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        ) : <div style={{ display: "flex", width: "100%" }}>
-        <p
-          style={{
-            justifyContent: "space-around",
-          }}
-        >
-          No Orders at this time
-        </p>
-      </div>}
+        ) : (
+          <div style={{ display: "flex", width: "100%" }}>
+            <p
+              style={{
+                justifyContent: "space-around",
+              }}
+            >
+              No Orders at this time
+            </p>
+          </div>
+        )}
       </>
     );
   };
