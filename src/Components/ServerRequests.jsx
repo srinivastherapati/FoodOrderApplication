@@ -66,3 +66,17 @@ export const getAllCustomers=async ()=>{
     console.error(e);
   }
 }
+
+export const cancelOrder = async (id) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/orders/cancel-order/${id}`,{
+        method:"POST",
+        headers:{ "Content-Type": "application/json" },
+      }
+    );
+    return await response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Error canceling order");
+  }
+};
