@@ -22,7 +22,7 @@ function LoginPage({ setLoggedIn, setUserData }) {
     try {
       const userData = await loginUser({ email, password });
       localStorage.setItem("loggedIn", "true");
-      userData.role = "";
+      userData.role = "admin";
       localStorage.setItem("userDetails", JSON.stringify(userData));
       setUserData(userData);
       setLoggedIn(true);
