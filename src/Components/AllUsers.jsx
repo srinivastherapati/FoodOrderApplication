@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,12 +8,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   CircularProgress,
 } from "@mui/material";
 import useHttp from "../hooks/useHttp";
 import ErrorPage from "./ErrorPage";
 import { getAllCustomers } from "./ServerRequests";
+import "./customerorders.css"; // Import the CSS file
 
 const styles = {
   container: {
@@ -50,64 +49,56 @@ const AllUsers = () => {
         setCustomers(data);
         setLoading(false);
       })
-      .catch((error) => setError(error || "failed to get customers"), error);
+      .catch((error) => setError(error || "Failed to fetch customers"));
   }, []);
 
   if (isLoading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress />
+      <Box className="loading-spinner">
+        <CircularProgress className="MuiCircularProgress-root" />
       </Box>
     );
   }
   if (error) {
-    return <ErrorPage title="failed to fetch meals" message={error.message} />;
+    return <ErrorPage title="Failed to fetch customers" message={error.message} />;
   }
 
   return (
-    <Box style={styles.container}>
-      <Typography variant="h4" gutterBottom>
-        Customer List
-      </Typography>
-      <TableContainer component={Paper} style={{ boxShadow: "none" }}>
-        <Table>
-          <TableHead>
+    <Box className="orders-container">
+      <TableContainer>
+        <Table className="MuiTable-root">
+          <TableHead className="MuiTableHead-root">
             <TableRow>
-              <TableCell style={styles.tableHeader}>Customer Name</TableCell>
-              <TableCell style={styles.tableHeader}>Customer Email</TableCell>
-              <TableCell style={styles.tableHeader} align="center">
+              <TableCell className="MuiTableCell-root">Customer Name</TableCell>
+              <TableCell className="MuiTableCell-root">Customer Email</TableCell>
+              <TableCell className="MuiTableCell-root" align="center">
                 Number of Orders
               </TableCell>
-              <TableCell style={styles.tableHeader} align="center">
+              <TableCell className="MuiTableCell-root" align="center">
                 Total Order Value
               </TableCell>
-              <TableCell style={styles.tableHeader} align="center">
+              <TableCell className="MuiTableCell-root" align="center">
                 Last Order Date
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody className="MuiTableBody-root">
             {customers.map((customer, idx) => (
-              <TableRow key={idx}>
-                <TableCell style={styles.tableCell}>
+              <TableRow key={idx} className="MuiTableRow-root">
+                <TableCell className="MuiTableCell-root">
                   {customer.customerName}
                 </TableCell>
-                <TableCell style={styles.tableCell}>
+                <TableCell className="MuiTableCell-root">
                   {customer.customerEmail}
                 </TableCell>
-                <TableCell style={styles.tableCell} align="center">
+                <TableCell className="MuiTableCell-root" align="center">
                   {customer.numberOfOrders}
                 </TableCell>
-                <TableCell style={styles.tableCell} align="center">
+                <TableCell className="MuiTableCell-root" align="center">
                   ${customer.customerTotalOrderValue.toFixed(2)}
                 </TableCell>
-                <TableCell style={styles.tableCell} align="center">
-                  {customer.numberOfOrders != 0
+                <TableCell className="MuiTableCell-root" align="center">
+                  {customer.numberOfOrders !== 0
                     ? new Date(customer.lastOrderDate).toLocaleDateString()
                     : "Order not Placed"}
                 </TableCell>
