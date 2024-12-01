@@ -6,22 +6,23 @@ import ClearIcon from "@mui/icons-material/Clear";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
 
-export default function MealItem({ meal, isAdmin }) {
+export default function MealItem({ product, isAdmin }) {
   const cartContxt = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
   function handleAddMeal() {
-    cartContxt.addItems({ ...meal, quantity });
+    cartContxt.addItems({ ...product, quantity });
   }
 
   function handleEdit() {
-    console.log("Edit meal:", meal);
+    console.log("Edit meal:", product);
     // Logic for editing the meal can go here (e.g., opening a modal for editing)
   }
 
   function handleDelete() {
-    console.log("Delete meal:", meal);
+    console.log("Delete meal:", product);
     // Logic for deleting the meal
   }
 
@@ -36,11 +37,17 @@ export default function MealItem({ meal, isAdmin }) {
   return (
     <li className="meal-item">
       <article>
-        <img src={`http://localhost:3000/${meal.image}`} alt={meal.name} />
+        <img src={`${product.imageUrl}`} alt={product.name} />
         <div>
-          <h3>{meal.name}</h3>
-          <p className="meal-item-price">{meal.price}</p>
-          <p className="meal-item-description">{meal.description}</p>
+          <h3>
+            {product.name}{" "}
+            <span>
+              <StarHalfIcon style={{ fontSize: "18px", color: "#ffc404" }} />{" "}
+              {product.rating}
+            </span>{" "}
+          </h3>
+          <p className="meal-item-price">{product.price}</p>
+          <p className="meal-item-description">{product.description}</p>
         </div>
         <p className="meal-item-actions">
           {!isAdmin && <Buttons onClick={handleAddMeal}>Add to Cart</Buttons>}
