@@ -122,7 +122,7 @@ const CustomerOrders = () => {
                               <TableHead>
                                 <TableRow>
                                   <TableCell>Product Name</TableCell>
-                                  <TableCell>Quantity</TableCell>
+                                  <TableCell>Quantity Bought</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
