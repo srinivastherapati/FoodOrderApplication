@@ -19,7 +19,7 @@ export default function Meals({ isAdmin, category }) {
     []
   );
 
-  let isAdd = false;
+  const [isAdd, setIsAdd] = useState(false);
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,7 +60,7 @@ export default function Meals({ isAdmin, category }) {
   };
 
   const handleAddMealSuccess = () => {
-    isAdd = false;
+    setIsAdd(false);
     setShowAddModal(false);
     window.location.reload();
   };
@@ -76,8 +76,9 @@ export default function Meals({ isAdmin, category }) {
   }
 
   const handleEditMeal = (product) => {
+    console.log(product);
     setCurrentProduct(product);
-    isAdd = false;
+    setIsAdd(false);
     setShowAddModal(true); // Open modal for editing
   };
 
@@ -90,7 +91,7 @@ export default function Meals({ isAdmin, category }) {
       category: category,
       price: "",
     });
-    isAdd = true;
+    setIsAdd(true);
     setShowAddModal(true);
   };
 
@@ -141,6 +142,7 @@ export default function Meals({ isAdmin, category }) {
               borderRadius: "10px",
               height: "40px", // Align height
               "& .MuiSelect-icon": { color: "black" },
+              marginRight: isAdmin ? "0px" : "78px",
             }}
             renderValue={(selected) => selected || "Sort By"}
           >

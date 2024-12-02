@@ -23,7 +23,9 @@ export const loginUser = async (credentials) => {
     );
     return await response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Error logging in");
+    throw new Error(
+      error.response.data || "Error logging in, Please try again"
+    );
   }
 };
 
@@ -103,11 +105,46 @@ export const updateQuantity = async (productId, type) => {
 export const deleteProduct = async (productId) => {
   try {
     const response = await axios.delete(
-      `${API_BASE_URL}/products/${productId}`
+      `${API_BASE_URL}/products/delete/${productId}`
     );
     return response.data; // Return the response data if needed
   } catch (error) {
     console.error("Error updating order status:", error);
     throw error; // Propagate the error to the caller
+  }
+};
+
+export const addProduct = async (product) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/products/add`, product);
+    return response; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+
+export const updateProduct = async (productId, product) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/products/update/${productId}`,
+      product
+    );
+    return response; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error; // Propagate the error to the caller
+  }
+};
+
+export const updateProductRating = async (userId, productId, rating) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/review/add/${userId}/${productId}?rating=${rating}`
+    );
+    return response; // Return the response data if needed
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error;
   }
 };
