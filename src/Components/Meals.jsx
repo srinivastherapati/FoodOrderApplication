@@ -88,8 +88,8 @@ export default function Meals({ isAdmin, category }) {
       imageUrl: "",
       stock: 1,
       description: "",
-      category: category,
       price: "",
+      category: category,
     });
     setIsAdd(true);
     setShowAddModal(true);
@@ -167,7 +167,7 @@ export default function Meals({ isAdmin, category }) {
                 handleAddMeal();
               }}
             >
-              Add New Meal
+              Add New Item
             </Button>
           )}
         </Box>

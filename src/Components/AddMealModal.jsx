@@ -26,6 +26,7 @@ export default function AddMealModal({
   const [imageUrl, setImageUrl] = useState(currentProduct.imageUrl);
   const [description, setDescription] = useState(currentProduct.description);
   const [stock, setstock] = useState(1);
+  const [price,setPrice]=useState(currentProduct.price);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -37,6 +38,7 @@ export default function AddMealModal({
       setName(currentProduct.name);
       setImageUrl(currentProduct.imageUrl);
       setDescription(currentProduct.description);
+      setPrice(currentProduct.price);
       setstock(currentProduct.stock || 1);
     }
   }, [currentProduct]);
@@ -59,6 +61,7 @@ export default function AddMealModal({
           const response = updateProduct(currentProduct.id, productData);
           if (response) {
             alert("Updated Product Successfully ! ");
+            window.location.reload();
           }
         } catch (error) {
           alert("There was an error : " + error);
@@ -69,6 +72,7 @@ export default function AddMealModal({
           const response = addProduct(productData);
           if (response) {
             alert("Added Product Successfully ! ");
+            window.location.reload();
           }
         } catch (error) {
           alert("There was an error : " + error);
@@ -93,7 +97,7 @@ export default function AddMealModal({
     >
       <Box sx={modalStyle}>
         <Typography id="add-meal-modal-title" variant="h6" component="h2">
-          {!isAdd ? "Edit Meal" : "Add New Meal"}
+          {!isAdd ? "Edit Item" : "Add New Item"}
         </Typography>
         <form>
           <TextField
@@ -120,6 +124,14 @@ export default function AddMealModal({
             onChange={(e) => setDescription(e.target.value)}
             required
           />
+            <TextField
+            label="Price"
+            fullWidth
+            margin="normal"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
           <TextField
             label="Stock"
             fullWidth
@@ -137,7 +149,7 @@ export default function AddMealModal({
             sx={{ marginTop: "20px" }}
             onClick={() => handleSubmit()}
           >
-            {isLoading ? "Processing..." : !isAdd ? "Update Meal" : "Add Meal"}
+            {isLoading ? "Processing..." : !isAdd ? "Update Item" : "Add Item"}
           </Button>
         </form>
       </Box>
