@@ -62,7 +62,7 @@ export default function Meals({ isAdmin, category }) {
   const handleAddMealSuccess = () => {
     setIsAdd(false);
     setShowAddModal(false);
-    // window.location.reload();
+    window.location.reload();
   };
 
   const displayedProducts =

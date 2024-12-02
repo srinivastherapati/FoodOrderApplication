@@ -19,8 +19,12 @@ export default function MealItem({ product, isAdmin, onEdit }) {
 
   function handleDelete() {
     try {
+      let val = confirm("Are you sure you want to delete?");
+      if (val === false) return;
       console.log("Delete meal:", product);
       deleteProduct(product.id);
+      alert("Deleted Product Successfully !");
+      window.location.reload();
     } catch (error) {
       alert("Error : " + error);
     }
@@ -72,17 +76,17 @@ export default function MealItem({ product, isAdmin, onEdit }) {
                 aria-label="Edit"
               />
               <div className="quantity-controls">
-                <RemoveIcon
+                {/* <RemoveIcon
                   sx={{ color: "#ffc404" }}
                   onClick={decrementQuantity}
                   aria-label="Decrease Quantity"
-                />
+                /> */}
                 <p>{product.stock}</p>
-                <AddIcon
+                {/* <AddIcon
                   sx={{ color: "#ffc404" }}
                   onClick={incrementQuantity}
                   aria-label="Increase Quantity"
-                />
+                /> */}
               </div>
               <ClearIcon sx={{ color: "#ffc404" }} onClick={handleDelete} />
             </div>

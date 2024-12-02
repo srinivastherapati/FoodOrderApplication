@@ -13,8 +13,17 @@ import {
   IconButton,
   Collapse,
 } from "@mui/material";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { cancelOrder, getCustomerOrders } from "./ServerRequests.jsx";
+import {
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  Star,
+  StarBorder,
+} from "@mui/icons-material";
+import {
+  cancelOrder,
+  getCustomerOrders,
+  updateProductRating,
+} from "./ServerRequests.jsx";
 import "./CustomerOrders.css";
 import Buttons from "./UI/Buttons.jsx";
 
@@ -22,13 +31,11 @@ const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [openRow, setOpenRow] = useState({}); // Track which rows are expanded
+  const [openRow, setOpenRow] = useState({});
+  const [ratings, setRatings] = useState({}); // Track product ratings.
+  const userData = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
-    // Fetch orders for the logged-in user
-    const userDetails = localStorage.getItem("userDetails");
-    const userData = JSON.parse(userDetails);
-
     getCustomerOrders(userData.userId)
       .then((data) => {
         setOrders(data);
@@ -45,6 +52,17 @@ const CustomerOrders = () => {
     cancelOrder(id);
     alert("Order Cancelled, Refund Initiated");
   }, []);
+
+  const handleRatingChange = (productId, rating) => {
+    console.log("Came Here " + productId);
+    try {
+      updateProductRating(userData.userId, productId, rating);
+      alert("Rating updated successfully");
+    } catch (error) {
+      alert("Error : " + error);
+    }
+    setRatings((prev) => ({ ...prev, [productId]: rating }));
+  };
 
   const toggleRow = (orderId) => {
     setOpenRow((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
@@ -78,6 +96,24 @@ const CustomerOrders = () => {
     );
   }
 
+  const renderStars = (productId) => {
+    const currentRating = ratings[productId] || 0;
+    return (
+      <Box>
+        {[1, 2, 3, 4, 5].map((value) => (
+          <IconButton
+            key={value}
+            onClick={() => handleRatingChange(productId, value)}
+            size="small"
+            style={{ color: value <= currentRating ? "#FFD700" : "#ccc" }} // Gold for filled stars
+          >
+            {value <= currentRating ? <Star /> : <StarBorder />}
+          </IconButton>
+        ))}
+      </Box>
+    );
+  };
+
   const renderTable = (orders, title) => {
     return (
       <>
@@ -93,14 +129,13 @@ const CustomerOrders = () => {
                   <TableCell>Order ID</TableCell>
                   <TableCell>Order Date</TableCell>
                   <TableCell>Total Amount</TableCell>
-                  <TableCell>Order status</TableCell>
-                  <TableCell> Cancel Order</TableCell>
+                  <TableCell>Order Status</TableCell>
+                  <TableCell>Cancel Order</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
                   <React.Fragment key={order.orderId}>
-                    {/* Main Order Row */}
                     <TableRow>
                       <TableCell>
                         <IconButton
@@ -135,11 +170,10 @@ const CustomerOrders = () => {
                       </TableCell>
                     </TableRow>
 
-                    {/* Collapsible Row for Order Items */}
                     <TableRow>
                       <TableCell
                         style={{ paddingBottom: 0, paddingTop: 0 }}
-                        colSpan={4}
+                        colSpan={6}
                       >
                         <Collapse
                           in={openRow[order.orderId]}
@@ -155,6 +189,7 @@ const CustomerOrders = () => {
                                 <TableRow>
                                   <TableCell>Product Name</TableCell>
                                   <TableCell>Quantity Bought</TableCell>
+                                  <TableCell>Rate Product</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -163,6 +198,9 @@ const CustomerOrders = () => {
                                     <TableCell>{product.name}</TableCell>
                                     <TableCell>
                                       {product.quantityBought}
+                                    </TableCell>
+                                    <TableCell>
+                                      {renderStars(product.productId)}
                                     </TableCell>
                                   </TableRow>
                                 ))}

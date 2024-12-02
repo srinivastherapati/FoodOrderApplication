@@ -74,7 +74,7 @@ export default function AddMealModal({
           alert("There was an error : " + error);
         }
       }
-      onAddSuccess(); // Trigger the callback to refresh the list
+      // onAddSuccess(); // Trigger the callback to refresh the list
       onClose(); // Close the modal
     } catch (err) {
       setError(err.message);
