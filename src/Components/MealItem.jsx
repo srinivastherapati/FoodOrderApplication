@@ -31,7 +31,7 @@ export default function MealItem({ product, isAdmin, onEdit }) {
       
       setIsEditingUnits(false);
        // Close the input field after saving
-       window.location.reload
+       window.location.reload()
     } catch (error) {
       console.error("Error updating units:", error);
     }
@@ -84,20 +84,27 @@ export default function MealItem({ product, isAdmin, onEdit }) {
             </span>{" "}
           </h3>
           <p className="meal-item-price">${product.price}</p>
-          <p className="meal-item-price">{product.category==="FOOD" ? "":
-           isAdmin && isEditingUnits ? (
-            <input
-              type="text"
-              value={updatedUnits}
-              onChange={handleUnitChange}
-              onBlur={saveUnits} 
-              autoFocus
-            />
-          ) : (
-            <span onClick={() => isAdmin && setIsEditingUnits(true)}>
-              {product.units}
-            </span>
-          )}</p>
+          <p className="meal-item-price">
+  {product.category === "FOOD" ? "" : isAdmin && isEditingUnits ? (
+    <select
+      value={updatedUnits}
+      onChange={handleUnitChange}
+      onBlur={saveUnits} 
+      autoFocus
+    >
+      <option value="KGS">kgs</option>
+      <option value="LBS">lbs</option>
+      <option value="PACKET">packet</option>
+      <option value="GALLONS">gallon</option>
+      <option value="LITERS">liter</option>
+      
+    </select>
+  ) : (
+    <span onClick={() => isAdmin && setIsEditingUnits(true)}>
+      {product.units}
+    </span>
+  )}
+</p>
 
           <p className="meal-item-description">{product.description}</p>
         </div>
