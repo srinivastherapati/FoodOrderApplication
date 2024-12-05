@@ -21,7 +21,6 @@ export default function MealItem({ product, isAdmin, onEdit }) {
   }
   const handleUnitChange = (e) => {
     setUpdatedUnits(e.target.value);
-    window.location.reload
   };
 
   const saveUnits = async () => {
@@ -32,6 +31,7 @@ export default function MealItem({ product, isAdmin, onEdit }) {
       
       setIsEditingUnits(false);
        // Close the input field after saving
+       window.location.reload
     } catch (error) {
       console.error("Error updating units:", error);
     }

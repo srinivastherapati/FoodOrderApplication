@@ -50,6 +50,8 @@ export default function AddMealModal({
       name,
       imageUrl,
       description,
+      price,
+      units,
       stock,
       category: currentProduct.category.toUpperCase(),
     };
