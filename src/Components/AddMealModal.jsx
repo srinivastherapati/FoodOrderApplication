@@ -138,6 +138,8 @@ export default function AddMealModal({
             label="Units"
             fullWidth
             margin="normal" 
+            value={units}
+            onChange={(e) => setUnits(e.target.value)}
             required
           />
           <TextField

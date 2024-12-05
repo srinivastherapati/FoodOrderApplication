@@ -8,14 +8,34 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import { deleteProduct } from "./ServerRequests";
+import { updateProduct } from "./ServerRequests";
 
 export default function MealItem({ product, isAdmin, onEdit }) {
   const cartContxt = useContext(CartContext);
   const [quantity, setQuantity] = useState(product.stock);
+  const [isEditingUnits, setIsEditingUnits] = useState(false);
+  const [updatedUnits, setUpdatedUnits] = useState(product.units);
 
   function handleAddMeal() {
     cartContxt.addItems({ ...product, quantity });
   }
+  const handleUnitChange = (e) => {
+    setUpdatedUnits(e.target.value);
+    window.location.reload
+  };
+
+  const saveUnits = async () => {
+    try {
+      // Update product units via the API
+      const updatedProduct = { ...product, units: updatedUnits };
+      await updateProduct(product.id, updatedProduct);
+      
+      setIsEditingUnits(false);
+       // Close the input field after saving
+    } catch (error) {
+      console.error("Error updating units:", error);
+    }
+  };
 
   function handleDelete() {
     try {
@@ -63,7 +83,22 @@ export default function MealItem({ product, isAdmin, onEdit }) {
               {product.rating}
             </span>{" "}
           </h3>
-          <p className="meal-item-price">${product.price}{product.category==="FOOD" ? "":`/${product.units}`}</p>
+          <p className="meal-item-price">${product.price}</p>
+          <p className="meal-item-price">{product.category==="FOOD" ? "":
+           isAdmin && isEditingUnits ? (
+            <input
+              type="text"
+              value={updatedUnits}
+              onChange={handleUnitChange}
+              onBlur={saveUnits} 
+              autoFocus
+            />
+          ) : (
+            <span onClick={() => isAdmin && setIsEditingUnits(true)}>
+              {product.units}
+            </span>
+          )}</p>
+
           <p className="meal-item-description">{product.description}</p>
         </div>
         <p className="meal-item-actions">
