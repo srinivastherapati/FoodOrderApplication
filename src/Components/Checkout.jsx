@@ -107,11 +107,39 @@ export default function Checkout() {
           <Input id="city" type="text" label="City" />
           <Input id="postal-code" type="text" label="Postal Code" />
         </div>
+        <p>Delivery Options</p>
+      <div className="control-row">
+        <label>
+          <input
+            type="radio"
+            name="deliveryOption"
+            value="pickup"
+            required
+          />
+          Pickup
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="deliveryOption"
+            value="delivery"
+            required
+          />
+          Delivery
+        </label>
+      </div>
         <p>Card Details</p>
         <Input id="Card Number" type="text" label="Card Number" />
         <Input id="Name on Card" type="text" label="Name On Card" />
         <Input id="CVV" type="text" label="CVV" />
-        <Input id="expiry" type="text" label="Expiry" />
+        <Input 
+    id="expiry" 
+    type="text" 
+    label="Expiry" 
+    placeholder="MM/YYYY" 
+    pattern="(0[1-9]|1[0-2])\/\d{4}" 
+    title="Enter expiry date in MM/YYYY format" 
+/>
         <p className="modal-actions">{actions}</p>
       </form>
     </Modal>

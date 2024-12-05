@@ -48,9 +48,13 @@ const CustomerOrders = () => {
       });
   }, []);
 
-  const handleCancelOrder = useCallback((id) => {
-    cancelOrder(id);
-    alert("Order Cancelled, Refund Initiated");
+  const handleCancelOrder = useCallback((id, status) => {
+    if (status === "READY" || status==="READY FOR PICKUP") {
+      alert("Order cannot be canceled as it is READY. Refund cannot be issued.");
+    } else {
+      cancelOrder(id);
+      alert("Order Cancelled, Refund Initiated");
+    }
   }, []);
 
   const handleRatingChange = (productId, rating) => {
@@ -130,6 +134,7 @@ const CustomerOrders = () => {
                   <TableCell>Order Date</TableCell>
                   <TableCell>Total Amount</TableCell>
                   <TableCell>Order Status</TableCell>
+                  <TableCell>Delivery Type</TableCell>
                   <TableCell>Cancel Order</TableCell>
                 </TableRow>
               </TableHead>
@@ -155,12 +160,15 @@ const CustomerOrders = () => {
                       </TableCell>
                       <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
                       <TableCell>{order.status}</TableCell>
+                      <TableCell>{order.deliveryType}</TableCell>
+                      
                       <TableCell>
                         {order.status === "PLACED" ||
                         order.status === "READY" ||
+                        order.status === "READY FOR PICKUP" ||
                         order.status === "PREPARING" ? (
                           <Buttons
-                            onClick={() => handleCancelOrder(order.orderId)}
+                            onClick={() => handleCancelOrder(order.orderId,order.status)}
                           >
                             Cancel
                           </Buttons>

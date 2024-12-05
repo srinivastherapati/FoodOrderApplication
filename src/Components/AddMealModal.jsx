@@ -29,6 +29,7 @@ export default function AddMealModal({
   const [price,setPrice]=useState(currentProduct.price);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [units,setUnits]= useState(currentProduct.units);
 
   const { sendRequest } = useHttp();
 
@@ -40,6 +41,7 @@ export default function AddMealModal({
       setDescription(currentProduct.description);
       setPrice(currentProduct.price);
       setstock(currentProduct.stock || 1);
+      setUnits(currentProduct.units);
     }
   }, [currentProduct]);
 

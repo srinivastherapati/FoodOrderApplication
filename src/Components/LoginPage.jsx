@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import { TextField, Button, Box, Typography, Paper,Grid } from "@mui/material";
 import { registerUser, loginUser } from "./ServerRequests"; // Import API functions
 
 function LoginPage({ setLoggedIn, setUserData }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
+  const[confirmPassword,setConfirmPassword]=useState("");
+  const [error, setError] = useState("");
 
   const togglePage = () => {
     setIsLogin(!isLogin);
@@ -35,7 +39,9 @@ function LoginPage({ setLoggedIn, setUserData }) {
     e.preventDefault();
     try {
       const newUser = {
-        userName: name,
+         firstName,
+         lastName,
+         dob,
         email,
         password,
         phoneNumber,
@@ -96,11 +102,28 @@ function LoginPage({ setLoggedIn, setUserData }) {
           {!isLogin && (
             <>
               <TextField
-                label="Name"
+                label="firstName"
                 fullWidth
                 margin="normal"
-                value={name}
+                value={firstName}
                 onChange={(e) => setName(e.target.value)}
+                required
+              />
+               <TextField
+                label="lastName"
+                fullWidth
+                margin="normal"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+               <TextField
+                label="DOB"
+                type="date"
+                fullWidth
+                margin="normal"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
                 required
               />
               <TextField
@@ -114,38 +137,48 @@ function LoginPage({ setLoggedIn, setUserData }) {
               <Typography variant="subtitle1" sx={{ textAlign: "left", mt: 2 }}>
                 Address:
               </Typography>
-              <TextField
-                label="Street"
-                fullWidth
-                margin="normal"
-                value={street}
-                onChange={(e) => setStreet(e.target.value)}
-                required
-              />
-              <TextField
-                label="City"
-                fullWidth
-                margin="normal"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-              />
-              <TextField
-                label="State"
-                fullWidth
-                margin="normal"
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                required
-              />
-              <TextField
-                label="Zip Code"
-                fullWidth
-                margin="normal"
-                value={zip}
-                onChange={(e) => setZip(e.target.value)}
-                required
-              />
+              <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <TextField
+            label="Street"
+            fullWidth
+            margin="normal"
+            value={street}
+            onChange={(e) => setStreet(e.target.value)}
+            required
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            label="City"
+            fullWidth
+            margin="normal"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            label="State"
+            fullWidth
+            margin="normal"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+            required
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            label="Zip Code"
+            fullWidth
+            margin="normal"
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
+            required
+          />
+        </Grid>
+      </Grid>
             </>
           )}
           <TextField
@@ -165,6 +198,17 @@ function LoginPage({ setLoggedIn, setUserData }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {!isLogin && <TextField
+        label="Confirm Password"
+        type="password"
+        fullWidth
+        margin="normal"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        required
+        error={!!error} // Shows red border if there's an error
+        helperText={error} // Displays the error message
+      />}
           <Button
             type="submit"
             fullWidth

@@ -88,6 +88,7 @@ export default function Meals({ isAdmin, category }) {
       imageUrl: "",
       stock: 1,
       description: "",
+      units:"",
       price: "",
       category: category,
     });

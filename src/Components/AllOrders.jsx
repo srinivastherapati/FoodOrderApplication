@@ -115,42 +115,53 @@ const AllOrders = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {totalOrders ?totalOrders.map((order) => (
-              <TableRow key={order.orderId}>
-                <TableCell>{order.orderId}</TableCell>
-                <TableCell>{order.customerName}</TableCell>
-                <TableCell>{order.customerEmail}</TableCell>
-                <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
-                <TableCell>
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  <select
-                    value={order.status}
-                    onChange={(e) =>
-                      handleStatusChange(order.orderId, e.target.value)
-                    }
-                    disabled={
-                      order.status === "Cancelled (By User)" ||
-                      order.status === "Cancelled (By Admin)" ||
-                      order.status==="DELIVERED"
-                    }
-                    style={{
-                      backgroundColor: "#1d1a16",
-                      color: "#d9e2f1",
-                      border: "none",
-                      padding: "5px",
-                    }}
-                  >
-                    {statusOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </TableCell>
-              </TableRow>
-            )):  (
+            {totalOrders ? (
+              totalOrders.map((order) => {
+                // Dynamically modify status options for each order
+                const dynamicStatusOptions = statusOptions.map((option) =>
+                  order.deliveryType === "pickup" && option === "READY"
+                    ? "READY FOR PICKUP"
+                    : option
+                );
+  
+                return (
+                  <TableRow key={order.orderId}>
+                    <TableCell>{order.orderId}</TableCell>
+                    <TableCell>{order.customerName}</TableCell>
+                    <TableCell>{order.customerEmail}</TableCell>
+                    <TableCell>${order.totalPayment.toFixed(2)}</TableCell>
+                    <TableCell>
+                      {new Date(order.orderDate).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <select
+                        value={order.status}
+                        onChange={(e) =>
+                          handleStatusChange(order.orderId, e.target.value)
+                        }
+                        disabled={
+                          order.status === "Cancelled (By User)" ||
+                          order.status === "Cancelled (By Admin)" ||
+                          order.status === "DELIVERED"
+                        }
+                        style={{
+                          backgroundColor: "#1d1a16",
+                          color: "#d9e2f1",
+                          border: "none",
+                          padding: "5px",
+                        }}
+                      >
+                        {dynamicStatusOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
               <div style={{ display: "flex", width: "100%" }}>
                 <p
                   style={{
@@ -165,7 +176,6 @@ const AllOrders = () => {
         </Table>
       </TableContainer>
     </Box>
-  );
-};
+  )};  
 
 export default AllOrders;

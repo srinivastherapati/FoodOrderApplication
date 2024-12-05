@@ -83,7 +83,7 @@ const AllUsers = () => {
             </TableRow>
           </TableHead>
           <TableBody className="MuiTableBody-root">
-            {customers.map((customer, idx) => (
+            {customers ?customers.map((customer, idx) => (
               <TableRow key={idx} className="MuiTableRow-root">
                 <TableCell className="MuiTableCell-root">
                   {customer.customerName}
@@ -103,7 +103,17 @@ const AllUsers = () => {
                     : "Order not Placed"}
                 </TableCell>
               </TableRow>
-            ))}
+            )):(
+              <div style={{ display: "flex", width: "100%" }}>
+                <p
+                  style={{
+                    justifyContent: "space-around",
+                  }}
+                >
+                  No Users at this time
+                </p>
+              </div>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

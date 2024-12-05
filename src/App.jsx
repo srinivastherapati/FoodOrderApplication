@@ -55,9 +55,7 @@ function App() {
             {currentPage == "food" && (
               <Meals isAdmin={userData.role==='admin'} category={"food"} />
             )}
-            {currentPage == "beverages" && (
-              <Meals isAdmin={userData.role==='admin'} category={"beverages"} />
-            )}
+            
             {currentPage == "grocery" && (
               <Meals isAdmin={userData.role==='admin'} category={"grocery"} />
             )}
@@ -69,6 +67,9 @@ function App() {
             )}
             {currentPage == "gas" && (
               <Meals isAdmin={userData.role==='admin'} category={"gas"} />
+            )}
+            {currentPage == "tobacco" && (
+              <Meals isAdmin={userData.role==='admin'} category={"tobacco"} />
             )}
             {userData.role!='admin' && currentPage == "your-orders" && <CustomerOrders />}
             {userData.role==='admin' && currentPage == "all-orders" && <AllOrders />}

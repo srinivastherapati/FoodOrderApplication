@@ -16,12 +16,7 @@ const Sidebar = ({ userData, onLogout, currentPage, setCurrentPage }) => {
           >
             FOOD
           </li>
-          <li 
-            className={isActive("beverages") ? "active" : ""} 
-            onClick={() => setCurrentPage("beverages")}
-          >
-            BEVERAGES
-          </li>
+          
           <li 
             className={isActive("grocery") ? "active" : ""} 
             onClick={() => setCurrentPage("grocery")}
@@ -45,6 +40,12 @@ const Sidebar = ({ userData, onLogout, currentPage, setCurrentPage }) => {
             onClick={() => setCurrentPage("gas")}
           >
             GAS
+          </li>
+          <li 
+            className={isActive("tobacco") ? "active" : ""} 
+            onClick={() => setCurrentPage("tobacco")}
+          >
+            TOBACCO
           </li>
           {userData.role !== "admin" && (
             <li 
