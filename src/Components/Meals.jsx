@@ -5,6 +5,7 @@ import MealItem from "./MealItem.jsx";
 import AddMealModal from "./AddMealModal.jsx";
 import { Button, TextField, Select, MenuItem, Box } from "@mui/material";
 import { API_BASE_URL } from "./ServerRequests.jsx";
+import AddNewCategory from "./AddNewCategory.jsx";
 
 const requestConfig = {};
 
@@ -26,6 +27,7 @@ export default function Meals({ isAdmin, category }) {
   const [sortOption, setSortOption] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [currentProduct, setCurrentProduct] = useState("");
+  const [currentCategory, setCurrentCategory] = useState("");
 
   const products = loadProducts || [];
 
@@ -91,6 +93,14 @@ export default function Meals({ isAdmin, category }) {
       units:"",
       price: "",
       category: category,
+    });
+    setIsAdd(true);
+    setShowAddModal(true);
+  };
+  const handleAddCategory = (product) => {
+    setCurrentCategory({
+      name: "",
+      description:""
     });
     setIsAdd(true);
     setShowAddModal(true);
@@ -170,7 +180,26 @@ export default function Meals({ isAdmin, category }) {
             >
               Add New Item
             </Button>
-          )}
+          ) }
+           {isAdmin && (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#ffc404",
+                color: "black",
+                borderRadius: "10px",
+                height: "40px", // Align height
+                "&:hover": { backgroundColor: "#e6b800" },
+                marginRight: "78px",
+              }}
+              onClick={() => {
+                setCurrentCategory(null);
+                handleAddCategory();
+              }}
+            >
+              Add New Category
+            </Button>
+          ) }
         </Box>
       </Box>
 
@@ -182,6 +211,11 @@ export default function Meals({ isAdmin, category }) {
         currentProduct={currentProduct}
         isAdd={isAdd}
       />
+      <AddNewCategory open={showAddModal}
+       onClose={() => setShowAddModal(false)}
+       onAddSuccess={handleAddMealSuccess}
+       //currentCategory={currentCategory}
+       isAdd={isAdd} />
 
       {/* Meal List */}
       <ul id="meals">

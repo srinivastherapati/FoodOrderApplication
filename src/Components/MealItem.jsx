@@ -81,7 +81,7 @@ export default function MealItem({ product, isAdmin, onEdit }) {
                   onClick={decrementQuantity}
                   aria-label="Decrease Quantity"
                 /> */}
-                <p>{product.stock}</p>
+                <p>{product.category==="FOOD"?"":product.stock}</p>
                 {/* <AddIcon
                   sx={{ color: "#ffc404" }}
                   onClick={incrementQuantity}

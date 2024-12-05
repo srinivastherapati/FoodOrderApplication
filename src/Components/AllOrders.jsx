@@ -102,6 +102,7 @@ const AllOrders = () => {
         <Table>
           <TableHead>
             <TableRow>
+            <TableCell style={styles.tableHeader}>Products</TableCell>
               <TableCell style={styles.tableHeader}>Order ID</TableCell>
               <TableCell style={styles.tableHeader}>Customer Name</TableCell>
               <TableCell style={styles.tableHeader}>Customer Email</TableCell>
@@ -126,6 +127,26 @@ const AllOrders = () => {
   
                 return (
                   <TableRow key={order.orderId}>
+                     <TableCell>
+                      <select
+                        style={{
+                          backgroundColor: "#f5f5f5",
+                          color: "#000",
+                          border: "1px solid #ccc",
+                          padding: "5px",
+                          width: "100%",
+                        }}
+                      >
+                        {order.products.map((product) => (
+                          <option
+                            key={product.name}
+                            value={product.name}
+                          >
+                            {`${product.name} (Qty: ${product.quantityBought})`}
+                          </option>
+                        ))}
+                      </select>
+                    </TableCell>
                     <TableCell>{order.orderId}</TableCell>
                     <TableCell>{order.customerName}</TableCell>
                     <TableCell>{order.customerEmail}</TableCell>
@@ -176,6 +197,7 @@ const AllOrders = () => {
         </Table>
       </TableContainer>
     </Box>
-  )};  
+  );
+}  
 
 export default AllOrders;

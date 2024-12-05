@@ -134,6 +134,12 @@ export default function AddMealModal({
             onChange={(e) => setPrice(e.target.value)}
             required
           />
+           <TextField
+            label="Units"
+            fullWidth
+            margin="normal" 
+            required
+          />
           <TextField
             label="Stock"
             fullWidth
