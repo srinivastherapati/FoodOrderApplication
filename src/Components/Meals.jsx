@@ -26,6 +26,7 @@ export default function Meals({ isAdmin, category }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddCategory, setShowAddCategory] = useState(false);
   const [currentProduct, setCurrentProduct] = useState("");
   const [currentCategory, setCurrentCategory] = useState("");
 
@@ -64,6 +65,7 @@ export default function Meals({ isAdmin, category }) {
   const handleAddMealSuccess = () => {
     setIsAdd(false);
     setShowAddModal(false);
+    setShowAddCategory(false);
     window.location.reload();
   };
 
@@ -103,7 +105,7 @@ export default function Meals({ isAdmin, category }) {
       description:""
     });
     setIsAdd(true);
-    setShowAddModal(true);
+    setShowAddCategory(true);
   };
 
   return (
@@ -211,8 +213,8 @@ export default function Meals({ isAdmin, category }) {
         currentProduct={currentProduct}
         isAdd={isAdd}
       />
-      <AddNewCategory open={showAddModal}
-       onClose={() => setShowAddModal(false)}
+      <AddNewCategory open={showAddCategory}
+       onClose={() => setShowAddCategory(false)}
        onAddSuccess={handleAddMealSuccess}
        //currentCategory={currentCategory}
        isAdd={isAdd} />

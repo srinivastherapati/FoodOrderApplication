@@ -63,7 +63,7 @@ export default function MealItem({ product, isAdmin, onEdit }) {
               {product.rating}
             </span>{" "}
           </h3>
-          <p className="meal-item-price">${product.price}/{product.units}</p>
+          <p className="meal-item-price">${product.price}{product.category==="FOOD" ? "":`/${product.units}`}</p>
           <p className="meal-item-description">{product.description}</p>
         </div>
         <p className="meal-item-actions">
@@ -81,7 +81,7 @@ export default function MealItem({ product, isAdmin, onEdit }) {
                   onClick={decrementQuantity}
                   aria-label="Decrease Quantity"
                 /> */}
-                <p>{product.category==="FOOD"?"":product.stock}</p>
+                <p>{product.category==="FOOD"? "":product.stock}</p>
                 {/* <AddIcon
                   sx={{ color: "#ffc404" }}
                   onClick={incrementQuantity}
